@@ -1,0 +1,16 @@
+﻿{
+    "metadata":  {
+                     "author":  "Mr. Tuấn Beo (TuanBeo)",
+                     "description":  "Danh sách HWID thiết bị tin cậy của Admin Tuấn Beo",
+                     "lastUpdated":  "2026-10-28 16:42:33"
+                 },
+    "trustedAdmins":  [
+                          {
+                              "hwid":  "2D10233502962FA065B40966E4017673",
+                              "deviceName":  "HCM-RD1-TUANDX",
+                              "userName":  "TuanDX",
+                              "description":  "Máy trạm chính thức của Anh Beo",
+                              "addedAt":  "2026-10-28 16:42:33"
+                          }
+                      ]
+}

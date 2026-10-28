@@ -1,0 +1,215 @@
+# ==============================================================================
+# HỆ THỐNG ĐẶC TẢ BẢN QUYỀN, CẤP PHÉP CHỨC NĂNG & PHÂN PHỐI TB-TOOLBOX
+# Tác giả & Quản trị viên tối cao: Đào Xuân Tuấn (Mr. Tuấn Beo)
+# Kho lưu trữ Server: GitHub TuanBeoToolbox (https://github.com/TuanBeo/TuanBeoToolbox)
+# ==============================================================================
+
+---
+
+## 🔒 I. QUY CHUẨN BẢO MẬT & RANH GIỚI PHÂN QUYỀN (SECURITY BOUNDARIES)
+
+1. **Hạ tầng Server trung tâm:** 
+   - Server chính của hệ thống là GitHub repository: **`TuanBeoToolbox`**.
+   - Toàn bộ dữ liệu xác thực, phát hành bản vá và module tính năng đều lưu trữ và đối soát tập trung qua GitHub của Anh Beo.
+2. **Tường lửa cấm can thiệp cấu hình (Tamper-Proof):**
+   - Người dùng tải Toolbox về tuyệt đối **KHÔNG ĐƯỢC** điều chỉnh các thông tin cấu hình, phân quyền tính năng.
+   - Mọi tệp cấu hình trên máy người dùng đều được ký số HMAC-SHA256; nếu phát hiện bị sửa đổi bằng tay, hệ thống sẽ tự động khóa ngay lập tức.
+3. **Bảo mật tuyệt đối thông tin Key (Zero-Leak Policy):**
+   - Các file chứa Key bản quyền, sổ cái cấp phép phải được bảo mật, mã hóa độc quyền theo HWID của từng máy, tuyệt đối không được để lộ hay chia sẻ ra bên ngoài.
+4. **Đặc quyền Admin, Cơ chế Đa Thiết bị & Khóa MasterKey Tối Cao:**
+   - Các file cấu hình, phân quyền nhóm tính năng, công cụ tạo key, duyệt yêu cầu **CHỈ ĐƯỢC PHÉP THỰC THI TRÊN CÁC MÁY CỦA ADMIN TUẤN BEO** (Hỗ trợ linh hoạt: Máy công ty, Máy ở nhà, Laptop cá nhân).
+   - **Tên biến định danh Khóa Chủ duy nhất trên toàn hệ thống:** **`MasterKey`** (hoặc hằng số **`TB_MASTER_KEY`**).
+   - **Giá trị Khóa Chủ mặc định của hệ thống:** **`Tuanbeo1998@`**
+   - Cơ chế xác thực 2 tầng: Tự động nhận diện danh sách HWID tin cậy của Anh Beo. Khi Anh Beo chuyển sang máy mới (ví dụ về nhà làm việc lần đầu), hệ thống yêu cầu nhập `MasterKey` (`Tuanbeo1998@`) một lần duy nhất; sau khi xác thực thành công, hệ thống tự động lưu máy đó vào Danh sách trắng (`admin-whitelist`) để những lần sau mở thẳng không cần hỏi lại.
+   - Người ngoài không có `MasterKey` tuyệt đối không thể xâm nhập hay mở được menu Admin.
+5. **Cấm tuyệt đối lệnh `git pull` trên máy Client (Non-Git Distribution):**
+   - Người dùng khi tải Toolbox về **TUYỆT ĐỐI KHÔNG SỬ DỤNG GIT PULL** để kéo source code về (tránh lộ lịch sử commit, file Admin và cấu trúc nội bộ).
+   - Quyền Git (clone, pull, push, merge) là **ĐẶC QUYỀN DUY NHẤT CỦA ADMIN TUẤN BEO**. Người dùng chỉ nhận bản đóng gói hoặc tải module chức năng tự động qua cơ chế độc lập (Non-Git Delivery).
+6. **Hệ thống Phòng Thủ 3 Tầng Thép Chống Can Thiệp & Cứu Hộ Khẩn Cấp (RSA-2048 & Disaster Recovery):**
+   - **Tầng 1 (Code-Integrity Seal RSA-2048):** Niêm phong toàn bộ mã nguồn `.ps1` bằng bảng mã băm SHA256 ký số bất đối xứng RSA-2048 Private Key của Admin. Người hiểu CNTT mở script ra sửa code thì mã băm lệch ➔ Tự khóa ngay. Client chỉ có Public Key nên không thể ký lại mã đã sửa.
+   - **Tầng 2 (Triple-Anchor Hardware Lock):** Khóa bản quyền neo giữ chéo 3 vị trí độc lập (Tệp mã hóa + Windows DPAPI Blob phần cứng + Registry ẩn Windows `CLSID`). Nếu người dùng copy file đơn lẻ sang máy khác hoặc sửa file thì lệch neo ➔ Tự động khóa.
+   - **Tầng 3 (Server Cloud Anchor & Anti-Clone):** Mọi kích hoạt đều gửi telemetry lên Server GitHub và đối soát 2 chiều. Nếu Server phát hiện 1 KeyId xuất hiện trên HWID thứ 2 ➔ Lập tức ghi nhận clone và thu hồi trên diện rộng!
+   - **Cơ chế Cứu Hộ Khẩn Cấp 3 Cấp Độ (Disaster Recovery):**
+     + Cấp 1 (Máy trạm chính chủ): Mở thẳng menu Admin không cần pass, có nút Reset MasterKey ngay lập tức.
+     + Cấp 2 (Mã Cứu Hộ Khẩn Cấp - Emergency Recovery Key): Chuỗi mã độc bản (ví dụ: `TB-RECOVERY-1730-4850-3724-2026`) để Anh Beo lưu trong điện thoại/Zalo. Quên pass ở bất kỳ đâu chỉ cần nhập mã này là mở khóa và đổi MasterKey tại chỗ.
+     + Cấp 3 (Chủ sở hữu GitHub): Dùng tài khoản `TuanBeo98` để khôi phục toàn bộ quyền từ xa.
+
+---
+
+## 📋 II. ĐĂNG KÝ DANH MỤC CHỨC NĂNG & NHÓM BẢN QUYỀN (FEATURE MATRIX)
+
+Quy ước công tắc tính năng: `1 = BẬT (Enable)` | `0 = TẮT (Disable)`
+
+1. **Cơ chế Tự Động Quét & Đồng Bộ Danh Mục (Dynamic Catalog Auto-Sync):**
+   - Mỗi lần mở hệ thống lên, chương trình tự động quét toàn bộ kho tính năng thực tế đang có trong Toolbox:
+     + **Chức năng đã xóa:** Nếu một chức năng đã bị xóa khỏi hệ thống ➔ Tự động loại bỏ hoàn toàn khỏi danh mục chung và tự động xóa khỏi tất cả các nhóm.
+     + **Chức năng mới thêm:** Nếu phát hiện có chức năng mới ➔ Tự động bổ sung vào danh mục chung, đồng thời tự động cập nhật vào TẤT CẢ các nhóm với trạng thái mặc định ban đầu là **`0` (TẮT)**.
+   - **Quy chuẩn mã định danh duy nhất (Unique IDs):**
+     + Mỗi chức năng bắt buộc phải có một Mã Chức Năng duy nhất trên toàn hệ thống (ví dụ: `F01_CLEANER`, `F02_SHUTDOWN`, `F03_RENAME_PC`...), tuyệt đối không trùng lặp.
+     + Mỗi nhóm bản quyền cũng có một Mã Nhóm duy nhất (`GRP_DEFAULT`, `GRP_ADVANCED`...).
+   - **Bảo toàn tính toàn vẹn ma trận (Matrix Integrity & State Persistence):**
+     + Nếu hệ thống có tổng cộng N chức năng thì trong MỌI NHÓM đều phải hiển thị đầy đủ đúng N chức năng đó.
+     + Nếu chức năng nào trong nhóm đã được bật lên `1` thì qua các phiên mở sau, hệ thống phải lưu giữ bền vững và hiển thị chính xác trạng thái `1` của chức năng đó trong nhóm đó.
+
+2. **Cấu hình các gói nhóm mẫu (Feature Groups):**
+   - **Nhóm 1 (Gói Mặc định / Tiêu chuẩn):**
+     + Chức năng xóa bộ nhớ tạm (F01) : 1 (BẬT)
+     + Chức năng số 2 (F02)           : 0 (TẮT)
+     + Chức năng số 3 (F03)           : 0 (TẮT)
+     + Chức năng số 4 (F04)           : 1 (BẬT)
+   - **Nhóm 2 (Gói Chuyên sâu / Nâng cao):**
+     + Chức năng xóa bộ nhớ tạm (F01) : 1 (BẬT)
+     + Chức năng số 2 (F02)           : 0 (TẮT)
+     + Chức năng số 3 (F03)           : 1 (BẬT)
+     + Chức năng số 4 (F04)           : 0 (TẮT)
+
+3. **Kiểm Tra & Tùy Biến Quyền Cho Từng Người Dùng (User Permission Inspector & Account Override):**
+   - Admin có màn hình chuyên biệt để **kiểm tra quyền đã đăng ký của bất kỳ người dùng nào**.
+   - Thao tác: Chọn đối tượng người dùng từ danh sách (theo Tên, Email, SĐT hoặc HWID).
+   - Hệ thống hiển thị bảng ma trận đầy đủ các tính năng hiện tại của người đó.
+   - **Quyền can thiệp linh hoạt của Admin:** Admin có toàn quyền bật thêm (chuyển sang 1) hoặc bỏ bớt (chuyển về 0) bất kỳ chức năng nào cho riêng người đó.
+   - **Nguyên tắc Ghi Đè Theo Tài Khoản (Account Override Rule):**
+     + Dù ban đầu người dùng đăng ký theo Nhóm 1 (Gói A), nhưng một khi Admin đã vào tùy chỉnh thêm/bớt tính năng cho người đó thì hệ thống sẽ tự động chuyển sang chế độ **"Cấp quyền riêng theo tài khoản"**.
+     + Khi đó, quyền thực tế của người dùng sẽ lấy chính xác theo danh sách tính năng đã được Admin can thiệp và phê duyệt sau cùng cho tài khoản đó.
+   - **Đồng bộ hai chiều tức thì xuống Client (Real-time Client Sync):**
+     + Sau khi Admin cập nhật trên Server, phía người dùng khi mở Toolbox (hoặc bấm "Đồng bộ bản quyền"):
+       * Tính năng được Admin bật thêm ➔ Tự động tải nạp về máy và sinh file launcher `@File-BAT/` tương ứng.
+       * Tính năng bị Admin bỏ bớt ➔ Tự động vô hiệu hóa và xóa sạch file script/launcher cục bộ trên máy người dùng, tránh bấm vào bị báo lỗi chương trình.
+
+---
+
+## 🛠️ III. BỘ CÔNG CỤ QUẢN TRỊ ADMIN (TẠO KEY & DUYỆT YÊU CẦU)
+
+*Chỉ chạy trên máy của Admin Tuấn Beo qua thư mục quản trị riêng biệt `@File-BAT/@Administrator/[ADMIN-01]-Quan-Ly-Va-Tao-Key.bat` (Thư mục `@Administrator` này được gitignore hoàn toàn và không bao giờ xuất hiện ở phía người dùng):*
+
+1. **Tiếp nhận & Chọn yêu cầu:**
+   - Liệt kê danh sách yêu cầu chưa xử lý từ File quản lý yêu cầu tạm (mỗi máy tính chỉ có duy nhất 1 mã yêu cầu HWID).
+   - Admin chọn yêu cầu cần cấp phép để xử lý.
+2. **Chọn quyền tính năng:**
+   - Hiển thị danh mục các nhóm chức năng đã cấu hình sẵn (Nhóm 1, Nhóm 2...) và các chức năng bổ sung riêng lẻ.
+   - Admin chọn nhóm hoặc tích chọn từng tính năng cấp phép cho người dùng đó.
+3. **Thiết lập thời hạn sử dụng:**
+   - Lựa chọn: Nhập số ngày sử dụng cụ thể (hệ thống tự tính toán chính xác ngày/giờ hết hạn) hoặc cấp Vô thời hạn (Lifetime).
+4. **Nhập thông tin người được cấp:**
+   - Tên người đăng ký, Email, Số điện thoại, Đơn vị/Phòng ban công tác...
+5. **Cổng phê duyệt trước khi tạo Key:**
+   - Hiển thị bảng tóm tắt: Tên người nhận, HWID, Gói chức năng đã cấp, Thời hạn sử dụng.
+   - Có đầy đủ các nút điều hướng: [Tiếp tục tạo Key] / [Quay lại sửa] / [Hủy bỏ an toàn].
+6. **Lưu trữ & Đóng gói:**
+   - Key tạo ra được ký số bí mật HMAC-SHA256 và tự động lưu vào Sổ cái File Quản lý Key.
+   - Tự động xuất tệp `key.txt` mang thông tin định danh của đúng người đó để gửi về cho họ.
+
+---
+
+## 🗄️ IV. HỆ THỐNG SỔ CÁI BẢN QUYỀN (LEDGERS)
+
+### 1. File Quản lý Yêu cầu Tạm (Pending Requests):
+- Lưu trữ các yêu cầu do Client gửi lên:
+  + Mã yêu cầu duy nhất (Hardware ID của máy Client).
+  + Thông tin người yêu cầu (Tên, Email, Số điện thoại).
+  + Nhu cầu chức năng cần dùng (nếu người dùng có ghi chú).
+  + Thời gian gửi yêu cầu.
+  + Trạng thái xử lý: `0 = Chưa xử lý (Chờ Admin duyệt)` | `1 = Đã cấp key`.
+
+### 2. File Quản lý Yêu cầu Đã Xử Lý (Processed Requests):
+- Lưu vết toàn bộ lịch sử các yêu cầu đã được Admin phê duyệt, thời điểm cấp key, gói tính năng đã bàn giao.
+
+### 3. File Quản lý Key (Key Ledger - Sổ cái Bản quyền):
+- Quản lý danh sách Key theo thứ tự tăng dần:
+  + **STT:** Số thứ tự tăng dần (001, 002, 003...).
+  + **Mã Key:** Chuỗi mã hóa chứa thông tin bản quyền và chữ ký HMAC.
+  + **HWID máy kích hoạt:** Mã phần cứng mainboard/CPU máy người dùng.
+  + **Trạng thái kích hoạt (0/1):** `0 = Chưa kích hoạt` | `1 = Đã kích hoạt trên máy Client`.
+  + **Trạng thái Key (0/1):** `1 = Còn hạn / Được phép hoạt động` | `0 = Hết hạn hoặc Bị Admin thu hồi`.
+  + **Thông tin chủ sở hữu:** Tên người dùng, Email, SĐT, Ngày tạo, Ngày hết hạn.
+  + **Quy tắc bất di bất dịch:** 1 Key chỉ được kích hoạt trên duy nhất 1 máy tính. Nếu copy thư mục sang máy khác, key sẽ không khớp HWID và tự khóa.
+
+---
+
+## 👤 V. HAI HÌNH THỨC SỬ DỤNG VÀ PHÂN PHỐI PHÍA NGƯỜI DÙNG CUỐI (CLIENT DEPLOYMENT MODES)
+
+*Cả 2 hình thức đều được quản lý tập trung trên Server và tuân thủ nghiêm ngặt nguyên tắc cốt lõi: **1 Key chỉ được kích hoạt trên DUY NHẤT 1 máy tính** (tuyệt đối chống copy chéo sang máy khác).*
+
+### 🟢 HÌNH THỨC 1: ĐĂNG KÝ & KÍCH HOẠT TƯƠNG TÁC (ONLINE INTERACTIVE / SELF-ENROLLMENT)
+1. **Bộ cài đặt 1-File Siêu Gọn (Bootstrap Setup):**
+   - Người dùng tải về chỉ có **DUY NHẤT 1 FILE CÀI ĐẶT** (ví dụ: `[00]-Cai-Dat-TB-Toolbox.bat`).
+   - Hoàn toàn độc lập, không cần cài Git, không dùng lệnh `git pull`.
+2. **Gửi yêu cầu cấp phép (Request Generation):**
+   - Nhấp đúp file cài đặt: Hệ thống tự động trích xuất mã định danh phần cứng duy nhất (HWID) từ máy tính đó (đổi tên máy tính không làm mất mã).
+   - Người dùng nhập thông tin:
+     + Họ và tên (Bắt buộc).
+     + Email & Số điện thoại.
+     + Thông tin chức năng mong muốn sử dụng (nếu để trống, Admin sẽ tự phân quyền).
+   - Hệ thống tự động ghi nhận thời gian hiện tại và gửi yêu cầu vào File quản lý yêu cầu tạm.
+3. **Kích hoạt phần mềm:**
+   - Sau khi nhận được tệp `key.txt` từ Admin:
+   - Khi mở lại file cài đặt, người dùng có 2 lựa chọn:
+     + *Cách 1:* Dán chuỗi Key trực tiếp vào màn hình console.
+     + *Cách 2:* Chọn nạp file `key.txt` có sẵn.
+   - Tool tự động đối soát: `HWID_May == HWID_Trong_Key`. Nếu khớp, gửi xác nhận kích hoạt lên server và thông báo thành công.
+4. **Tải nạp module chức năng động (Dynamic Module Hydration):**
+   - Chỉ những chức năng nào được cấp phép BẬT (= 1) trong Key mới được hệ thống tải về máy và kích hoạt launcher `@File-BAT/` tương ứng.
+
+---
+
+### 🔵 HÌNH THỨC 2: ĐÓNG GÓI SẴN KÈM KEY TỰ ĐỘNG KÍCH HOẠT (PRE-PACKAGED / ZERO-TOUCH MODE)
+*Dành riêng cho máy tính nội bộ công ty không có kết nối Internet, máy mạng cô lập (Air-Gapped) hoặc khi Admin chủ động bàn giao máy cho nhân viên:*
+1. **Admin đóng gói sẵn từ máy chủ:**
+   - Trên menu Admin, Mr. Tuấn Beo chọn đối tượng, phân quyền tính năng và chọn chức năng: **"Đóng gói sản phẩm cho người dùng (Build Pre-Packaged Client)"**.
+   - Gói sản phẩm xuất ra đã được nhúng sẵn mã Key và các module tính năng được phép sử dụng.
+2. **Cài đặt & Tự động áp dụng Key (Auto-Apply Key):**
+   - Khi người dùng tải gói về và nhấn file Cài đặt: Hệ thống **tự động kích hoạt (Apply Key) ngay lập tức** cho máy tính đó mà người dùng không cần nhập form hay dán key thủ công.
+3. **Cơ chế Khóa cứng máy đầu tiên (First-Run HWID Lock):**
+   - Ngay trong lần chạy đầu tiên trên máy A: Tool tự động "khóa chết" mã Key với HWID của máy A.
+   - Nếu người dùng copy nguyên vẹn gói cài đặt này mang sang máy B chạy: Tool phát hiện Key này đã bị đóng dấu thuộc về máy A ➔ **Lập tức từ chối và khóa chương trình trên máy B!**
+4. **Cơ chế Đồng bộ hoãn lại lên Server khi có mạng (Deferred Telemetry Sync):**
+   - *Khi máy Offline (Mạng nội bộ không có Internet):* Tool vẫn cho phép kích hoạt và sử dụng bình thường 100% các tính năng đã được đóng gói sẵn.
+   - *Khi máy có kết nối Internet (hoặc cắm mạng):* Tool sẽ âm thầm tự động đẩy thông tin kích hoạt (`HWID_Da_Kich_Hoat`, thời gian kích hoạt) lên Server GitHub để Sổ cái của Admin cập nhật trạng thái `Đã kích hoạt = 1`.
+5. **Cảnh báo bản quyền nghiêm ngặt màu ĐỎ khi mở cài đặt (Red Warning Banner):**
+   - Khi người dùng mở file cài đặt của gói đóng gói sẵn, màn hình console BẮT BUỘC hiển thị thông báo nổi bật bằng **CHỮ MÀU ĐỎ** để cảnh báo răn đe:
+     `[CẢNH BÁO BẢN QUYỀN]: Tệp cài đặt này được cấp riêng cho bạn và tuyệt đối KHÔNG ĐƯỢC cung cấp cho bất cứ ai hoặc bất kỳ máy tính nào khác. Nếu cố tình chia sẻ, bạn có thể bị tước vĩnh viễn quyền sử dụng toàn bộ hệ thống này!`
+
+---
+
+### ⚠️ QUY CHUẨN THU HỒI & GIA HẠN DÙNG CHUNG CHO CẢ 2 HÌNH THỨC:
+1. **Cơ chế tự hủy an toàn khi hết hạn hoặc bị thu hồi:**
+   - Nếu Key hết hạn sử dụng: Toàn bộ module chức năng và các file phím tắt `.bat` tương ứng trong `@File-BAT/` sẽ bị xóa sạch, tránh việc bấm vào gây lỗi.
+   - Nếu trên Server Admin chuyển `Trạng thái Key = 0` (Thu hồi bản quyền): Phía người dùng lập tức bị vô hiệu hóa toàn bộ tính năng.
+   - Hệ thống giữ lại duy nhất màn hình Gia hạn / Nâng cấp bản quyền.
+2. **Chức năng Gia hạn & Nâng cấp (License Renewal & Feature Upgrade):**
+   - Người dùng có sẵn nút "Gia hạn / Nâng cấp tính năng" ngay trong menu:
+   - Cho phép gửi yêu cầu xin gia hạn thêm thời gian hoặc xin cấp thêm các chức năng mới lên cho Admin Tuấn Beo phê duyệt.
+
+---
+
+## ⚡ VI. CHỦ ĐỘNG XỬ LÝ TRIỆT ĐỂ 12 ĐIỂM MÙ KỸ THUẬT CỐT TỬ (ZERO BLIND SPOTS)
+
+1. **Thuật toán tạo HWID lai (Hybrid HWID):**
+   - Không dựa duy nhất vào Motherboard Serial (tránh bị trùng do máy ảo hoặc main để trống serial).
+   - `HWID = SHA256(BaseBoard_Serial + CPU_ProcessorId + Windows_MachineGuid)`. Đảm bảo 100% duy nhất, bất biến kể cả đổi tên máy hay đổi user Windows.
+2. **Cơ chế Time-Vault chống gian lận lùi đồng hồ Windows:**
+   - Khi có mạng: Lấy mốc thời gian chuẩn từ Header Internet (Google / GitHub NTP).
+   - Khi offline: Ghi nhận mốc chạy gần nhất vào file ẩn mã hóa. Nếu phát hiện thời gian máy bị chỉnh lùi về quá khứ để lách hạn dùng ➔ Lập tức tự khóa bản quyền.
+3. **Bảo mật mã Key bằng chữ ký HMAC-SHA256 (Dùng MasterKey bí mật):**
+   - Cấu trúc Key: `[Payload_Base64].[Signature_HMAC]`.
+   - Chữ ký HMAC được sinh ra và đối soát bằng Khóa Chủ bí mật duy nhất: **`MasterKey` (`Tuanbeo1998@`)**.
+   - Người dùng sửa đổi bất kỳ ký tự nào trong file key thì chữ ký bị lệch, tool từ chối ngay.
+4. **Khóa HWID vào nội dung Key:**
+   - HWID được nhúng trực tiếp vào payload của Key. Copy file key sang máy khác sẽ lệch HWID và không kích hoạt được.
+5. **Phân phối Non-Git an toàn:**
+   - Người dùng không có quyền Git pull. Các module được tải về dưới dạng gói nén hoặc tải tệp độc lập theo đường dẫn riêng biệt, không để lộ thư mục `.git`.
+6. **Cơ chế xác thực Admin Đa Thiết bị (Multi-Device Admin & MasterKey Fallback):**
+   - Triệt tiêu 100% rủi ro bị mất quyền Admin khi Anh Beo chuyển đổi qua lại giữa máy công ty, máy ở nhà hoặc laptop cá nhân.
+   - Script Admin đối soát HWID với Danh sách trắng của Anh Beo. Nếu phát hiện thiết bị mới, mở cổng nhập Khóa Chủ duy nhất `MasterKey` (mặc định: `Tuanbeo1998@`); nhập đúng sẽ tự động cấp quyền vĩnh viễn cho máy đó, đảm bảo tính liên tục trong công việc của Anh Beo trên mọi máy tính.
+7. **Cơ chế Tamper-Proof cho file cấu hình:**
+   - File cấu hình trên máy Client được mã hóa và bọc chữ ký số. Người dùng không thể tự ý sửa file JSON/DAT để hack tính năng.
+8. **Quy trình tự hủy 2 pha an toàn (Safe Revocation):**
+   - Tránh lỗi `File In-Use` khi đang chạy mà tự xóa chính mình: Xóa các module con và phím tắt trước, sau đó đóng phiên an toàn.
+9. **Chính sách sử dụng Offline tạm thời (Grace Period):**
+   - Cho phép chạy khi mất mạng Internet trong vòng 3 đến 7 ngày dựa trên chữ ký nội bộ của Key; sau thời gian đó bắt buộc kết nối mạng để đối soát lại với Server.
+10. **Chính sách chuyển đổi máy tính (Device Re-binding):**
+    - Cung cấp chức năng trên giao diện Admin: Khi người dùng đổi máy tính mới, Admin có nút hủy kích hoạt HWID máy cũ trong sổ cái và cấp lại cho HWID mới.
+11. **Bảo mật sổ cái trên GitHub (Private Vault):**
+    - Sổ cái quản lý key của Admin được lưu trữ tại phân vùng/nhánh bảo mật hoặc mã hóa AES-256, người ngoài vào GitHub không thể đọc trộm danh sách key của khách hàng khác.
+12. **Bảo toàn định dạng UTF-8 with BOM Codepage 65001:**
+    - Toàn bộ file text, json, ps1 trao đổi giữa Client và Server đều tuân thủ UTF-8 có BOM, chống triệt để lỗi vỡ font tiếng Việt trên tên người dùng.

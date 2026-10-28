@@ -1,0 +1,22 @@
+﻿{
+    "metadata":  {
+                     "version":  "1.0.0",
+                     "author":  "Mr. Tuan Beo (TuanBeoToolbox)",
+                     "lastUpdated":  "2026-10-28 16:39:55"
+                 },
+    "users":  [
+                  {
+                      "identifier":  "USER_NV_A",
+                      "fullName":  "Nguyễn Văn A",
+                      "email":  "nva@asc.vn",
+                      "baseGroupId":  "GRP_DEFAULT",
+                      "isCustomOverride":  true,
+                      "assignedAt":  "2026-10-28 16:39:55",
+                      "lastUpdated":  "2026-10-28 16:39:55",
+                      "features":  {
+                                       "F04_SYSTEM_INFO":  1,
+                                       "F01_CLEANER":  1
+                                   }
+                  }
+              ]
+}
