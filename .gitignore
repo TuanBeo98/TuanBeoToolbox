@@ -1,0 +1,28 @@
+﻿# ==============================================================================
+# TuanBeoToolbox - .gitignore
+# Bản quyền: Mr. Tuấn Beo (TuanBeo)
+# ==============================================================================
+
+# Nhật ký thực thi (Bảo vệ thông tin cá nhân)
+Logs/*.log
+!Logs/.gitkeep
+
+# Tài liệu đặc tả nội bộ & Bí mật Admin (TUYỆT ĐỐI KHÔNG ĐẨY LÊN GITHUB PUBLIC)
+Note.txt
+*.secret
+*.key
+Config/key-ledger.json
+Config/admin-whitelist.json
+@File-BAT/*ADMIN*
+
+# File tạm hệ thống & editor
+*.tmp
+*.bak
+*~
+.DS_Store
+Thumbs.db
+
+# VS Code / Visual Studio
+.vscode/
+.vs/
+*.user

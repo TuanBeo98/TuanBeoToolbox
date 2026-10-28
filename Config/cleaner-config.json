@@ -1,0 +1,50 @@
+﻿{
+    "Version":  "1.0.0",
+    "Categories":  {
+                       "temp":  {
+                                    "Name":  "Xóa bộ nhớ tạm (User \u0026 System Temp)",
+                                    "Enabled":  1,
+                                    "Description":  "Thư mục %TEMP% và C:\\Windows\\Temp"
+                                },
+                       "prefetch":  {
+                                        "Name":  "Xóa bộ nhớ đệm Prefetch",
+                                        "Enabled":  0,
+                                        "Description":  "Thư mục C:\\Windows\\Prefetch"
+                                    },
+                       "update_cache":  {
+                                            "Name":  "Xóa tệp tải Windows Update cũ",
+                                            "Enabled":  0,
+                                            "Description":  "Thư mục C:\\Windows\\SoftwareDistribution\\Download và CBS Logs"
+                                        },
+                       "crash_dumps":  {
+                                           "Name":  "Xóa file báo cáo sự cố sập ứng dụng (Crash Dumps)",
+                                           "Enabled":  0,
+                                           "Description":  "%LOCALAPPDATA%\\CrashDumps và C:\\Windows\\Minidump"
+                                       },
+                       "delivery_optimization":  {
+                                                     "Name":  "Xóa cache tối ưu tải Windows Store (Delivery)",
+                                                     "Enabled":  0,
+                                                     "Description":  "C:\\Windows\\SoftwareDistribution\\DeliveryOptimization"
+                                                 },
+                       "thumbnail_cache":  {
+                                               "Name":  "Xóa bộ nhớ đệm ảnh thu nhỏ (Thumbnails)",
+                                               "Enabled":  0,
+                                               "Description":  "%LOCALAPPDATA%\\Microsoft\\Windows\\Explorer\\thumbcache_*.db"
+                                           },
+                       "recycle_bin":  {
+                                           "Name":  "Dọn sạch Thùng rác (Recycle Bin)",
+                                           "Enabled":  0,
+                                           "Description":  "Dọn sạch toàn bộ file trong Thùng rác mọi ổ đĩa"
+                                       },
+                       "browser_cache":  {
+                                             "Name":  "Xóa cache trình duyệt (Chrome, Edge)",
+                                             "Enabled":  0,
+                                             "Description":  "Chỉ xóa cache web, giữ nguyên 100% Mật khẩu, Cookie và Lịch sử"
+                                         },
+                       "dev_nuget_cache":  {
+                                               "Name":  "Xóa cache thư viện .NET (NuGet Packages)",
+                                               "Enabled":  0,
+                                               "Description":  "Thư mục %userprofile%\\.nuget\\packages"
+                                           }
+                   }
+}
