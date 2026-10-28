@@ -1,6 +1,6 @@
 ﻿# ==============================================================================
 # TB-TOOLBOX - FEATURE REGISTRY & MATRIX ENGINE (Feature-Registry.ps1)
-# Ban quyen: Mr. Tuan Beo (TuanBeo) - https://github.com/TuanBeo98/TuanBeoToolbox
+# Bản quyền thuộc về: Mr. Tuấn Beo (TuanBeoToolbox)
 # Chuc nang: Quan ly danh muc chuc nang, tu dong dong bo ma tran nhom ban quyen,
 #            bao toan trang thai [0/1] va ho tro ghi de quyen theo tung nguoi dung.
 # ==============================================================================
@@ -374,12 +374,12 @@ function Show-FeatureMatrixTable {
     $features = $matrix.Features
     $groups = $matrix.Groups
 
-    Write-Host "`n=== BANG MA TRAN TINH NANG & NHOM BAN QUYEN (TB-TOOLBOX) ===" -ForegroundColor Cyan
-    Write-Host ("Tong so chuc nang thuc te trong kho: {0}" -f $features.Count) -ForegroundColor Yellow
-    Write-Host ("Tong so goi nhom da cau hinh: {0}" -f $groups.Count) -ForegroundColor Yellow
+    Write-Host "`n=== BẢNG MA TRẬN TÍNH NĂNG & NHÓM BẢN QUYỀN (TB-TOOLBOX) ===" -ForegroundColor Cyan
+    Write-Host ("Tổng số chức năng thực tế trong kho: {0}" -f $features.Count) -ForegroundColor Yellow
+    Write-Host ("Tổng số gói nhóm đã cấu hình: {0}" -f $groups.Count) -ForegroundColor Yellow
     Write-Host "--------------------------------------------------------------------------------" -ForegroundColor DarkGray
 
-    $header = " {0,-18} | {1,-34}" -f "MA CHUC NANG", "TEN CHUC NANG"
+    $header = " {0,-18} | {1,-34}" -f "MÃ CHỨC NĂNG", "TÊN CHỨC NĂNG"
     foreach ($grp in $groups) {
         $header += " | {0,-14}" -f $grp.groupId
     }
@@ -399,7 +399,7 @@ function Show-FeatureMatrixTable {
                     $val = [int]$grp.features[$feat.Id]
                 }
             }
-            $statusStr = if ($val -eq 1) { "[ 1 - BAT ]" } else { "[ 0 - TAT ]" }
+            $statusStr = if ($val -eq 1) { "[ 1 - BẬT ]" } else { "[ 0 - TẮT ]" }
             $row += " | {0,-14}" -f $statusStr
         }
         Write-Host $row

@@ -1,6 +1,6 @@
 ﻿# ==============================================================================
 # TB-TOOLBOX - RSA CRYPTO & EMERGENCY RECOVERY ENGINE (Crypto-RSA.ps1)
-# Ban quyen: Mr. Tuan Beo (TuanBeo) - https://github.com/TuanBeo98/TuanBeoToolbox
+# Bản quyền thuộc về: Mr. Tuấn Beo (TuanBeoToolbox)
 # Chuc nang: Chu ky so bat doi xung RSA-2048 bit, Quan ly Khoa Rieng / Khoa Cong Khai
 #            va Co che Ma Cuu Ho Khan Cap (Emergency Recovery Key).
 # ==============================================================================
@@ -29,6 +29,11 @@ function Initialize-RSAKeyPair {
         Private Key chi luu tren may Admin, Public Key phan phoi cho Client.
     #>
     param ([switch]$ForceRegenerate)
+
+    # Neu tren may Client chi co Public Key -> Giu nguyen tuyet doi, khong ghi de!
+    if ((Test-Path $PUBLIC_KEY_FILE) -and (-not (Test-Path $PRIVATE_KEY_FILE)) -and (-not $ForceRegenerate)) {
+        return $true
+    }
 
     if ((Test-Path $PRIVATE_KEY_FILE) -and (Test-Path $PUBLIC_KEY_FILE) -and (-not $ForceRegenerate)) {
         return $true
@@ -88,7 +93,7 @@ function Verify-EmergencyRecoveryKey {
 function Sign-DataRSA {
     param ([string]$Data)
     if (-not (Test-Path $PRIVATE_KEY_FILE)) {
-        Initialize-RSAKeyPair | Out-Null
+        return $null
     }
 
     try {
@@ -100,7 +105,6 @@ function Sign-DataRSA {
         $sigBytes = $rsa.SignData($dataBytes, [System.Security.Cryptography.CryptoConfig]::MapNameToOID("SHA256"))
         return [Convert]::ToBase64String($sigBytes)
     } catch {
-        Write-Error "Loi khi ky so du lieu bang RSA Private Key: $($_.Exception.Message)"
         return $null
     }
 }
@@ -131,5 +135,7 @@ function Verify-DataRSA {
     }
 }
 
-# Tu dong khoi tao cap khoa lan dau
-Initialize-RSAKeyPair | Out-Null
+# Tu dong khoi tao cap khoa lan dau neu chua co public key
+if (-not (Test-Path $PUBLIC_KEY_FILE)) {
+    Initialize-RSAKeyPair | Out-Null
+}

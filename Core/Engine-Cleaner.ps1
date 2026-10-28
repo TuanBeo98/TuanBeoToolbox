@@ -40,10 +40,10 @@ if (Test-Path (Join-Path $coreDir "License-Engine.ps1")) {
     if (-not $isAdminMachine) {
         $licCheck = Verify-LicenseTripleAnchor -CurrentHWID $currentHwid
         if (-not $licCheck.IsValid) {
-            Show-HeaderBanner -SubTitle "CANH BAO BAN QUYEN & BAO MAT"
-            Write-Host " [X] KHONG THE KHOI CHAY UNG DUNG!" -ForegroundColor Red
-            Write-Host " Ly do: $($licCheck.Error)" -ForegroundColor Yellow
-            Write-Host "`n Vui long mo lai file [00]-Cai-Dat-TB-Toolbox.bat de kich hoat lai ban quyen.`n" -ForegroundColor DarkGray
+            Show-HeaderBanner -SubTitle "CẢNH BÁO BẢN QUYỀN & BẢO MẬT"
+            Write-Host " [X] KHÔNG THỂ KHỞI CHẠY ỨNG DỤNG!" -ForegroundColor Red
+            Write-Host " Lý do: $($licCheck.Error)" -ForegroundColor Yellow
+            Write-Host "`n Vui lòng mở lại file [00]-Cai-Dat-TB-Toolbox.bat để kích hoạt lại bản quyền.`n" -ForegroundColor DarkGray
             Wait-ForUserExit
             exit 1
         }

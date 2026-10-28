@@ -41,11 +41,11 @@ Bộ công cụ được đóng gói độc lập (Zero-Dependency), sử dụng
 
 ### 📥 1. Tải về máy:
 - **Cách 1 (Đơn giản nhất cho mọi máy tính - Không cần Git):**
-  1. Trên trang GitHub `TuanBeoToolbox`, bấm vào nút màu xanh **Code** ➔ Chọn **Download ZIP**.
+  1. Tải gói nén ZIP từ kho lưu trữ cá nhân của Admin Tuấn Beo.
   2. Chuột phải vào file vừa tải về ➔ Chọn **Extract All... (Giải nén)** ra bất kỳ thư mục nào (Desktop, ổ D:, ổ C:...).
-- **Cách 2 (Dành cho lập trình viên có sẵn Git):**
+- **Cách 2 (Dành cho máy tính có sẵn Git của tác giả):**
   ```cmd
-  git clone https://github.com/TuanBeo98/TuanBeoToolbox.git
+  git clone <REPO_URL_CA_NHAN>
   ```
 
 ### ⚡ 2. Cài đặt & Kích hoạt bản quyền:

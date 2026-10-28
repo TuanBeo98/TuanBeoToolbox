@@ -1,7 +1,7 @@
-# ==============================================================================
+﻿# ==============================================================================
 # HỆ THỐNG ĐẶC TẢ BẢN QUYỀN, CẤP PHÉP CHỨC NĂNG & PHÂN PHỐI TB-TOOLBOX
 # Tác giả & Quản trị viên tối cao: Đào Xuân Tuấn (Mr. Tuấn Beo)
-# Kho lưu trữ Server: GitHub TuanBeoToolbox (https://github.com/TuanBeo/TuanBeoToolbox)
+# Kho lưu trữ Server: GitHub cá nhân của Admin Tuấn Beo (Private Repository)
 # ==============================================================================
 
 ---
@@ -32,7 +32,7 @@
    - **Cơ chế Cứu Hộ Khẩn Cấp 3 Cấp Độ (Disaster Recovery):**
      + Cấp 1 (Máy trạm chính chủ): Mở thẳng menu Admin không cần pass, có nút Reset MasterKey ngay lập tức.
      + Cấp 2 (Mã Cứu Hộ Khẩn Cấp - Emergency Recovery Key): Chuỗi mã độc bản (ví dụ: `TB-RECOVERY-1730-4850-3724-2026`) để Anh Beo lưu trong điện thoại/Zalo. Quên pass ở bất kỳ đâu chỉ cần nhập mã này là mở khóa và đổi MasterKey tại chỗ.
-     + Cấp 3 (Chủ sở hữu GitHub): Dùng tài khoản `TuanBeo98` để khôi phục toàn bộ quyền từ xa.
+     + Cấp 3 (Chủ sở hữu GitHub): Dùng tài khoản GitHub chính chủ của tác giả để khôi phục toàn bộ quyền từ xa.
 
 ---
 

@@ -1,6 +1,6 @@
 ﻿# ==============================================================================
 # TB-TOOLBOX - LICENSE & CRYPTOGRAPHY ENGINE (License-Engine.ps1)
-# Ban quyen: Mr. Tuan Beo (TuanBeo) - https://github.com/TuanBeo98/TuanBeoToolbox
+# Bản quyền thuộc về: Mr. Tuấn Beo (TuanBeoToolbox)
 # Chuc nang: Thuat toan Hybrid HWID, Ky so HMAC-SHA256 (MasterKey), Time-Vault,
 #            Khoa 3 diem (Triple-Anchor: File + DPAPI + Registry) va Niem phong ma nguon.
 # ==============================================================================
@@ -208,21 +208,23 @@ function Save-LicenseTripleAnchor {
     param (
         [string]$KeyString,
         [PSCustomObject]$Payload,
-        [string]$CurrentHWID
+        [string]$CurrentHWID,
+        [string]$TargetKeyFilePath = ""
     )
     if (-not (Test-Path $CONFIG_DIR)) { New-Item -ItemType Directory -Path $CONFIG_DIR -Force | Out-Null }
 
-    # 1. ANCHOR 1: Tep Config/license.key
-    $keyFile = Join-Path $CONFIG_DIR "license.key"
+    # 1. ANCHOR 1: Tep license.key
+    $keyFile = if (-not [string]::IsNullOrWhiteSpace($TargetKeyFilePath)) { $TargetKeyFilePath } else { Join-Path $CONFIG_DIR "license.key" }
     $utf8WithBom = New-Object System.Text.UTF8Encoding($true)
     [System.IO.File]::WriteAllText($keyFile, $KeyString, $utf8WithBom)
 
     # 2. ANCHOR 2: Windows DPAPI Blob (Ma hoa cap Profile User & Hardware)
     try {
+        $dpapiFile = Join-Path (Split-Path -Parent $keyFile) ".license.dpapi"
         $secretBytes = [System.Text.Encoding]::UTF8.GetBytes("$($Payload.keyId)|$CurrentHWID|$($Payload.fullName)")
         $entropy = [System.Text.Encoding]::UTF8.GetBytes("TuanBeoTBToolbox2026")
         $protectedBytes = [System.Security.Cryptography.ProtectedData]::Protect($secretBytes, $entropy, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
-        [System.IO.File]::WriteAllBytes($DPAPI_ANCHOR_FILE, $protectedBytes)
+        [System.IO.File]::WriteAllBytes($dpapiFile, $protectedBytes)
     } catch {}
 
     # 3. ANCHOR 3: Windows Registry CLSID Anchor (Nhanh an khong can Admin)
@@ -242,14 +244,10 @@ function Save-LicenseTripleAnchor {
 }
 
 function Verify-LicenseTripleAnchor {
-    <#
-    .SYNOPSIS
-        Kiem tra xac thuc toan dien 3 tang:
-        - Tang 1: Kiem tra niem phong ma nguon (Code Integrity Seal)
-        - Tang 2: Doi soat 3 neo (File key + DPAPI Blob + Registry an)
-        - Tang 3: Kiem tra HWID va Han dung
-    #>
-    param ([string]$CurrentHWID)
+    param (
+        [string]$CurrentHWID,
+        [string]$TargetKeyFilePath = ""
+    )
 
     # TANG 1: Kiem tra niem phong ma nguon
     if (Get-Command Test-CodeIntegrity -ErrorAction SilentlyContinue) {
@@ -263,9 +261,9 @@ function Verify-LicenseTripleAnchor {
     }
 
     # TANG 2: Kiem tra ANCHOR 1 (File license.key)
-    $keyFile = Join-Path $CONFIG_DIR "license.key"
+    $keyFile = if (-not [string]::IsNullOrWhiteSpace($TargetKeyFilePath)) { $TargetKeyFilePath } else { Join-Path $CONFIG_DIR "license.key" }
     if (-not (Test-Path $keyFile)) {
-        return [PSCustomObject]@{ IsValid = $false; Error = "Khong tim thay tap tin ban quyen (license.key)!" }
+        return [PSCustomObject]@{ IsValid = $false; Error = "Không tìm thấy tập tin bản quyền (license.key)!" }
     }
 
     $keyStr = [System.IO.File]::ReadAllText($keyFile, [System.Text.Encoding]::UTF8).Trim()
@@ -275,10 +273,11 @@ function Verify-LicenseTripleAnchor {
     }
     $payload = $fileVerify.Payload
 
-    # Kiem tra ANCHOR 2: DPAPI
-    if (Test-Path $DPAPI_ANCHOR_FILE) {
+    # Kiểm tra ANCHOR 2: DPAPI
+    $dpapiFile = Join-Path (Split-Path -Parent $keyFile) ".license.dpapi"
+    if (Test-Path $dpapiFile) {
         try {
-            $protectedBytes = [System.IO.File]::ReadAllBytes($DPAPI_ANCHOR_FILE)
+            $protectedBytes = [System.IO.File]::ReadAllBytes($dpapiFile)
             $entropy = [System.Text.Encoding]::UTF8.GetBytes("TuanBeoTBToolbox2026")
             $unprotected = [System.Security.Cryptography.ProtectedData]::Unprotect($protectedBytes, $entropy, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
             $recovered = [System.Text.Encoding]::UTF8.GetString($unprotected)
@@ -286,18 +285,18 @@ function Verify-LicenseTripleAnchor {
             if ($parts[0] -ne $payload.keyId -or $parts[1].ToUpper() -ne $CurrentHWID.ToUpper()) {
                 return [PSCustomObject]@{
                     IsValid = $false
-                    Error   = "CANH BAO CAN THIEP: Du lieu ma hoa phan cung DPAPI khong khop voi ban quyen may nay!"
+                    Error   = "CẢNH BÁO CAN THIỆP: Dữ liệu mã hóa phần cứng DPAPI không khớp với bản quyền máy này!"
                 }
             }
         } catch {
             return [PSCustomObject]@{
                 IsValid = $false
-                Error   = "Loi giai ma DPAPI phan cung! Tap tin co the da bi copy sang may tinh hoac user khac."
+                Error   = "Lỗi giải mã DPAPI phần cứng! Tập tin có thể đã bị sao chép sang máy tính hoặc người dùng khác."
             }
         }
     }
 
-    # Kiem tra ANCHOR 3: Registry CLSID
+    # Kiểm tra ANCHOR 3: Registry CLSID
     if (Test-Path $REGISTRY_ANCHOR_PATH) {
         try {
             $regToken = (Get-ItemProperty -Path $REGISTRY_ANCHOR_PATH -Name "SystemSecurityToken" -ErrorAction SilentlyContinue).SystemSecurityToken
@@ -305,7 +304,7 @@ function Verify-LicenseTripleAnchor {
             if ($regToken.ToLower() -ne $expectedToken.ToLower()) {
                 return [PSCustomObject]@{
                     IsValid = $false
-                    Error   = "CANH BAO CAN THIEP: Ma xac thuc Registry Windows khong hop le!"
+                    Error   = "CẢNH BÁO CAN THIỆP: Mã xác thực Registry Windows không hợp lệ!"
                 }
             }
         } catch {}
@@ -418,20 +417,20 @@ function Lock-PrePackagedKeyToCurrentMachine {
         }
 
         # Luu va khoa chat 3 neo phan cung
-        Save-LicenseTripleAnchor -KeyString $lockedKey -Payload $payload -CurrentHWID $CurrentHWID
+        Save-LicenseTripleAnchor -KeyString $lockedKey -Payload $payload -CurrentHWID $CurrentHWID -TargetKeyFilePath $KeyFilePath
 
         return [PSCustomObject]@{
             Success       = $true
             IsFirstRun    = $true
-            Message       = "Kich hoat thanh cong va da khoa chat 3 neo phan cung vao may tinh nay!"
+            Message       = "Kích hoạt thành công và đã khóa chặt 3 neo phần cứng vào máy tính này!"
             Payload       = $payload
             LicenseString = $lockedKey
         }
     }
 
-    # Truong hop 2: Key da bind HWID -> Kiem tra xem co phai may nay khong
+    # Trường hợp 2: Key đã bind HWID -> Kiểm tra xem có phải máy này không
     if ($payload.hwid.ToUpper() -eq $CurrentHWID.ToUpper()) {
-        # Kiem tra doi soat 3 neo
+        # Kiểm tra đối soát 3 neo
         $anchorCheck = Verify-LicenseTripleAnchor -CurrentHWID $CurrentHWID
         if (-not $anchorCheck.IsValid) {
             return [PSCustomObject]@{
@@ -444,7 +443,7 @@ function Lock-PrePackagedKeyToCurrentMachine {
         return [PSCustomObject]@{
             Success       = $true
             IsFirstRun    = $false
-            Message       = "Key da duoc kich hoat hop le tren may tinh nay."
+            Message       = "Key đã được kích hoạt hợp lệ trên máy tính này."
             Payload       = $payload
             LicenseString = $keyContent
         }
@@ -452,7 +451,7 @@ function Lock-PrePackagedKeyToCurrentMachine {
         return [PSCustomObject]@{
             Success    = $false
             IsFirstRun = $false
-            Message    = "Vi pham ban quyen: Goi cai dat nay da duoc khoa vao may khac (HWID: $($payload.hwid)). Khong duoc phep copy su dung!"
+            Message    = "Vi phạm bản quyền: Gói cài đặt này đã được khóa vào máy khác (HWID: $($payload.hwid)). Không được phép sao chép sử dụng!"
         }
     }
 }

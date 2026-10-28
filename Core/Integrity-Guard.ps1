@@ -1,6 +1,6 @@
 ﻿# ==============================================================================
 # TB-TOOLBOX - CODE INTEGRITY GUARD (Integrity-Guard.ps1)
-# Ban quyen: Mr. Tuan Beo (TuanBeo) - https://github.com/TuanBeo98/TuanBeoToolbox
+# Bản quyền thuộc về: Mr. Tuấn Beo (TuanBeoToolbox)
 # Chuc nang: Niem phong ma nguon bang SHA256 & Chu ky so bat doi xung RSA-2048 bit.
 #            Ngan chan nguoi am hieu CNTT mo script .ps1 ra sua code/bypass verify.
 # ==============================================================================
@@ -92,7 +92,7 @@ function Test-CodeIntegrity {
     if (-not (Test-Path $SEAL_FILE)) {
         return [PSCustomObject]@{
             IsValid = $false
-            Error   = "Khong tim thay dau niem phong ma nguon (.integrity.seal)! He thong co the da bi can thiep."
+            Error   = "Không tìm thấy dấu niêm phong mã nguồn (.integrity.seal)! Hệ thống có thể đã bị can thiệp."
         }
     }
 
@@ -102,28 +102,28 @@ function Test-CodeIntegrity {
         if ($parts.Length -ne 3 -or $parts[0] -ne "TBSEAL-RSA") {
             return [PSCustomObject]@{
                 IsValid = $false
-                Error   = "Dau niem phong he thong khong dung dinh dang RSA!"
+                Error   = "Dấu niêm phong hệ thống không đúng định dạng RSA!"
             }
         }
 
         $base64 = $parts[1]
         $receivedSig = $parts[2]
 
-        # Kiem tra chu ky RSA-2048 voi Public Key
+        # Kiểm tra chữ ký RSA-2048 với Public Key
         $isSigValid = Verify-DataRSA -Data $base64 -SignatureBase64 $receivedSig
         if (-not $isSigValid) {
             return [PSCustomObject]@{
                 IsValid = $false
-                Error   = "Chu ky niem phong RSA khong hop le! Tep niem phong da bi gia mao hoac can thiep."
+                Error   = "Chữ ký niêm phong RSA không hợp lệ! Tệp niêm phong đã bị giả mạo hoặc can thiệp."
             }
         }
 
-        # Giai ma noi dung seal
+        # Giải mã nội dung seal
         $jsonBytes = [Convert]::FromBase64String($base64)
         $jsonStr = [System.Text.Encoding]::UTF8.GetString($jsonBytes)
         $manifest = $jsonStr | ConvertFrom-Json
 
-        # So sanh tung file tren o dia voi hash niem phong
+        # So sánh từng file trên ổ đĩa với hash niêm phong
         if ($manifest.files) {
             foreach ($prop in $manifest.files.PSObject.Properties) {
                 $relPath = $prop.Name
@@ -133,7 +133,7 @@ function Test-CodeIntegrity {
                 if (-not (Test-Path $fullPath)) {
                     return [PSCustomObject]@{
                         IsValid = $false
-                        Error   = "Phat hien tap tin he thong bi thieu: $relPath"
+                        Error   = "Phát hiện tập tin hệ thống bị thiếu: $relPath"
                     }
                 }
 
@@ -141,7 +141,7 @@ function Test-CodeIntegrity {
                 if ($currentHash.ToLower() -ne $expectedHash.ToLower()) {
                     return [PSCustomObject]@{
                         IsValid = $false
-                        Error   = "CANH BAO XAM PHAM: Ma nguon tap tin '$relPath' da bi can thiep hoac sua doi trai phep!"
+                        Error   = "CẢNH BÁO XÂM PHẠM: Mã nguồn tập tin '$relPath' đã bị can thiệp hoặc sửa đổi trái phép!"
                     }
                 }
             }

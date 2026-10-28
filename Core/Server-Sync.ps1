@@ -1,8 +1,8 @@
 ﻿# ==============================================================================
 # TB-TOOLBOX - SERVER CLOUD ANCHOR & TELEMETRY ENGINE (Server-Sync.ps1)
-# Ban quyen: Mr. Tuan Beo (TuanBeo) - https://github.com/TuanBeo98/TuanBeoToolbox
-# Chuc nang: Dong bo trang thai kich hoat len Server, chong clone 2 may cung dung 1 key,
-#            ho tro hoan dong bo khi offline va gioi han thoi gian offline (Grace Period).
+# Bản quyền thuộc về: Mr. Tuấn Beo (TuanBeoToolbox)
+# Chức năng: Đồng bộ trạng thái kích hoạt lên Server, chống clone 2 máy cùng dùng 1 key,
+#            hỗ trợ hoãn đồng bộ khi offline và giới hạn thời gian offline (Grace Period).
 # ==============================================================================
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -11,10 +11,9 @@
 $TB_ROOT = Split-Path -Parent $PSScriptRoot
 $CONFIG_DIR = Join-Path $TB_ROOT "Config"
 $TELEMETRY_QUEUE_FILE = Join-Path $CONFIG_DIR ".telemetry-queue"
-$SERVER_REPO_URL = "https://raw.githubusercontent.com/TuanBeo98/TuanBeoToolbox/main"
 
 $script:TB_MASTER_KEY = "Tuanbeo1998@"
-$script:MAX_OFFLINE_DAYS = 14 # Thoi gian offline toi da cho phep truoc khi bat buoc can thiep mang
+$script:MAX_OFFLINE_DAYS = 14 # Thời gian offline tối đa cho phép trước khi bắt buộc can thiệp mạng
 
 function Test-InternetConnection {
     try {
