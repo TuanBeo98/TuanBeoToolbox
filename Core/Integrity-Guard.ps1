@@ -47,7 +47,8 @@ function Seal-Codebase {
         "Core\Config-Manager.ps1",
         "Core\Engine-Cleaner.ps1",
         "Core\Client-Bootstrap.ps1",
-        "Core\Server-Sync.ps1"
+        "Core\Server-Sync.ps1",
+        "Core\Push-ToolboxToServer.ps1"
     )
 
     $fileHashes = [ordered]@{}
