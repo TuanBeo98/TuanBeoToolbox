@@ -1,0 +1,9 @@
+{
+  "id": "F03_NETWORK_TOOLS",
+  "name": "Tối ưu hóa & Làm mới mạng (DNS/IP)",
+  "description": "Xóa bộ nhớ đệm DNS, giải phóng và cấp phát lại địa chỉ IP, reset winsock",
+  "category": "Mạng",
+  "launcherBat": "[03]-Lam-Moi-Mang-Va-DNS.bat",
+  "entryPoint": "Core/Modules/F03_NETWORK_TOOLS/Engine-Network.ps1",
+  "version": "1.0.0"
+}

@@ -1,0 +1,160 @@
+﻿# ==============================================================================
+# TB-TOOLBOX - CODE INTEGRITY GUARD (Integrity-Guard.ps1)
+# Ban quyen: Mr. Tuan Beo (TuanBeo) - https://github.com/TuanBeo98/TuanBeoToolbox
+# Chuc nang: Niem phong ma nguon bang SHA256 & Chu ky so bat doi xung RSA-2048 bit.
+#            Ngan chan nguoi am hieu CNTT mo script .ps1 ra sua code/bypass verify.
+# ==============================================================================
+
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::InputEncoding  = [System.Text.Encoding]::UTF8
+
+$TB_ROOT = Split-Path -Parent $PSScriptRoot
+$CORE_DIR = Join-Path $TB_ROOT "Core"
+$CONFIG_DIR = Join-Path $TB_ROOT "Config"
+$SEAL_FILE = Join-Path $CONFIG_DIR ".integrity.seal"
+
+# Dot-source Crypto-RSA neu chua co
+if (Test-Path (Join-Path $CORE_DIR "Crypto-RSA.ps1")) {
+    . (Join-Path $CORE_DIR "Crypto-RSA.ps1")
+}
+
+function Get-FileSha256 {
+    param ([string]$FilePath)
+    if (-not (Test-Path $FilePath)) { return $null }
+    try {
+        $bytes = [System.IO.File]::ReadAllBytes($FilePath)
+        $sha = [System.Security.Cryptography.SHA256]::Create()
+        $hashBytes = $sha.ComputeHash($bytes)
+        return [System.BitConverter]::ToString($hashBytes).Replace('-', '').ToLower()
+    } catch {
+        return $null
+    }
+}
+
+function Seal-Codebase {
+    <#
+    .SYNOPSIS
+        Admin chay ham nay de niem phong toan bo cac script loi cua Toolbox.
+        Moi tap tin deu duoc băm SHA256 va ky so boi RSA Private Key.
+    #>
+    if (-not (Test-Path $CONFIG_DIR)) { New-Item -ItemType Directory -Path $CONFIG_DIR -Force | Out-Null }
+
+    $targetFiles = @(
+        "Core\Common-UI.ps1",
+        "Core\Crypto-RSA.ps1",
+        "Core\License-Engine.ps1",
+        "Core\Feature-Registry.ps1",
+        "Core\Config-Manager.ps1",
+        "Core\Engine-Cleaner.ps1",
+        "Core\Client-Bootstrap.ps1",
+        "Core\Server-Sync.ps1"
+    )
+
+    $fileHashes = [ordered]@{}
+    foreach ($rel in $targetFiles) {
+        $fullPath = Join-Path $TB_ROOT $rel
+        if (Test-Path $fullPath) {
+            $hash = Get-FileSha256 -FilePath $fullPath
+            $fileHashes[$rel] = $hash
+        }
+    }
+
+    $manifest = [PSCustomObject]@{
+        sealedAt = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+        author   = "Mr. Tuan Beo (TuanBeo)"
+        version  = "2.0.0-RSA"
+        files    = $fileHashes
+    }
+
+    $json = $manifest | ConvertTo-Json -Depth 5
+    $base64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($json))
+    
+    # Ky so bang RSA-2048 Private Key
+    $sig = Sign-DataRSA -Data $base64
+    if ([string]::IsNullOrWhiteSpace($sig)) {
+        Write-Error "Khong the ky so ma nguon bang RSA!"
+        return $false
+    }
+
+    $sealContent = "TBSEAL-RSA.$base64.$sig"
+    $utf8WithBom = New-Object System.Text.UTF8Encoding($true)
+    [System.IO.File]::WriteAllText($SEAL_FILE, $sealContent, $utf8WithBom)
+
+    return $true
+}
+
+function Test-CodeIntegrity {
+    <#
+    .SYNOPSIS
+        Kiem tra tinh toan ven cua ma nguon bang Public Key RSA-2048.
+        Neu phat hien bat ky tap tin nao bi sua doi -> Tu choi ngay lap tuc!
+    #>
+    if (-not (Test-Path $SEAL_FILE)) {
+        return [PSCustomObject]@{
+            IsValid = $false
+            Error   = "Khong tim thay dau niem phong ma nguon (.integrity.seal)! He thong co the da bi can thiep."
+        }
+    }
+
+    try {
+        $raw = [System.IO.File]::ReadAllText($SEAL_FILE, [System.Text.Encoding]::UTF8).Trim()
+        $parts = $raw.Split('.')
+        if ($parts.Length -ne 3 -or $parts[0] -ne "TBSEAL-RSA") {
+            return [PSCustomObject]@{
+                IsValid = $false
+                Error   = "Dau niem phong he thong khong dung dinh dang RSA!"
+            }
+        }
+
+        $base64 = $parts[1]
+        $receivedSig = $parts[2]
+
+        # Kiem tra chu ky RSA-2048 voi Public Key
+        $isSigValid = Verify-DataRSA -Data $base64 -SignatureBase64 $receivedSig
+        if (-not $isSigValid) {
+            return [PSCustomObject]@{
+                IsValid = $false
+                Error   = "Chu ky niem phong RSA khong hop le! Tep niem phong da bi gia mao hoac can thiep."
+            }
+        }
+
+        # Giai ma noi dung seal
+        $jsonBytes = [Convert]::FromBase64String($base64)
+        $jsonStr = [System.Text.Encoding]::UTF8.GetString($jsonBytes)
+        $manifest = $jsonStr | ConvertFrom-Json
+
+        # So sanh tung file tren o dia voi hash niem phong
+        if ($manifest.files) {
+            foreach ($prop in $manifest.files.PSObject.Properties) {
+                $relPath = $prop.Name
+                $expectedHash = $prop.Value
+                $fullPath = Join-Path $TB_ROOT $relPath
+
+                if (-not (Test-Path $fullPath)) {
+                    return [PSCustomObject]@{
+                        IsValid = $false
+                        Error   = "Phat hien tap tin he thong bi thieu: $relPath"
+                    }
+                }
+
+                $currentHash = Get-FileSha256 -FilePath $fullPath
+                if ($currentHash.ToLower() -ne $expectedHash.ToLower()) {
+                    return [PSCustomObject]@{
+                        IsValid = $false
+                        Error   = "CANH BAO XAM PHAM: Ma nguon tap tin '$relPath' da bi can thiep hoac sua doi trai phep!"
+                    }
+                }
+            }
+        }
+
+        return [PSCustomObject]@{
+            IsValid = $true
+            Error   = ""
+        }
+    } catch {
+        return [PSCustomObject]@{
+            IsValid = $false
+            Error   = "Loi khi kiem tra tinh toan ven ma nguon: $($_.Exception.Message)"
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "F04_SYSTEM_INFO",
+  "name": "Thông tin cấu hình phần cứng",
+  "description": "Trích xuất thông số CPU, RAM, Ổ đĩa, Mainboard và HWID của máy tính",
+  "category": "Hệ thống",
+  "launcherBat": "[04]-Thong-Tin-Phan-Cung-HWID.bat",
+  "entryPoint": "Core/Modules/F04_SYSTEM_INFO/Engine-SysInfo.ps1",
+  "version": "1.0.0"
+}

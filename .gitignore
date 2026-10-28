@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # TuanBeoToolbox - .gitignore
 # Bản quyền: Mr. Tuấn Beo (TuanBeo)
 # ==============================================================================
@@ -13,6 +13,16 @@ Note.txt
 *.key
 Config/key-ledger.json
 Config/admin-whitelist.json
+Config/pending-requests.json
+Config/user-permissions.json
+Config/.time-vault
+Config/.license.dpapi
+Config/.telemetry-queue
+Config/admin-private.rsa
+Config/.recovery.vault
+Dist/
+@File-BAT/@Administrator/
+@File-BAT/ADMIN/
 @File-BAT/*ADMIN*
 
 # File tạm hệ thống & editor

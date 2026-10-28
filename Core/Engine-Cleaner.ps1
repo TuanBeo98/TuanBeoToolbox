@@ -18,6 +18,38 @@ if (-not (Test-Path $logDir)) {
     New-Item -ItemType Directory -Path $logDir -Force | Out-Null
 }
 
+# ==============================================================================
+# BẢO VỆ BẢN QUYỀN & NIÊM PHONG TÍNH TOÀN VẸN 3 TẦNG (TRIPLE-SHIELD GATE)
+# ==============================================================================
+if (Test-Path (Join-Path $coreDir "License-Engine.ps1")) {
+    . (Join-Path $coreDir "License-Engine.ps1")
+    $currentHwid = Get-MachineHWID
+
+    # Kiểm tra xem có phải máy Admin Tuấn Beo không
+    $whitelistFile = Join-Path $rootDir "Config\admin-whitelist.json"
+    $isAdminMachine = $false
+    if (Test-Path $whitelistFile) {
+        try {
+            $wData = [System.IO.File]::ReadAllText($whitelistFile, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+            if ($wData.trustedAdmins | Where-Object { $_.hwid -eq $currentHwid }) {
+                $isAdminMachine = $true
+            }
+        } catch {}
+    }
+
+    if (-not $isAdminMachine) {
+        $licCheck = Verify-LicenseTripleAnchor -CurrentHWID $currentHwid
+        if (-not $licCheck.IsValid) {
+            Show-HeaderBanner -SubTitle "CANH BAO BAN QUYEN & BAO MAT"
+            Write-Host " [X] KHONG THE KHOI CHAY UNG DUNG!" -ForegroundColor Red
+            Write-Host " Ly do: $($licCheck.Error)" -ForegroundColor Yellow
+            Write-Host "`n Vui long mo lai file [00]-Cai-Dat-TB-Toolbox.bat de kich hoat lai ban quyen.`n" -ForegroundColor DarkGray
+            Wait-ForUserExit
+            exit 1
+        }
+    }
+}
+
 function Test-IsAdmin {
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
     return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)

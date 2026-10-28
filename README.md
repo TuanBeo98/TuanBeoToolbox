@@ -1,4 +1,4 @@
-﻿# 🧰 TB-Toolbox (TuanBeoToolbox)
+# 🧰 TB-Toolbox (TuanBeoToolbox)
 > 🚀 **Hệ thống tiện ích, dọn dẹp và tinh chỉnh Windows toàn diện (All-in-One Windows Utility & Tweaks)**  
 > 👤 **Tác giả:** Đào Xuân Tuấn (Mr. Tuấn Beo)  
 > 🏢 **Tổ chức:** Công ty Cổ phần Giải pháp Giáo dục ASC  
@@ -45,12 +45,18 @@ Bộ công cụ được đóng gói độc lập (Zero-Dependency), sử dụng
   2. Chuột phải vào file vừa tải về ➔ Chọn **Extract All... (Giải nén)** ra bất kỳ thư mục nào (Desktop, ổ D:, ổ C:...).
 - **Cách 2 (Dành cho lập trình viên có sẵn Git):**
   ```cmd
-  git clone https://github.com/TuanBeo/TuanBeoToolbox.git
+  git clone https://github.com/TuanBeo98/TuanBeoToolbox.git
   ```
 
-### ⚡ 2. Khởi chạy 1-Click:
-- Mở thư mục vừa giải nén, vào thư mục **`@File-BAT/`**.
-- Nhấp đúp chuột vào file:  
+### ⚡ 2. Cài đặt & Kích hoạt bản quyền:
+- Vào thư mục **`@File-BAT/`**, nhấp đúp file:
+  👉 **`[00]-Cai-Dat-TB-Toolbox.bat`**
+- Hệ thống hỗ trợ cả 2 hình thức:
+  1. **Kích hoạt tự động (Gói đóng gói sẵn - Pre-Packaged):** Tự động nhận diện Key, hiển thị cảnh báo đỏ và khóa bản quyền vào máy đầu tiên.
+  2. **Kích hoạt tương tác:** Trích xuất mã phần cứng (HWID), gửi yêu cầu đăng ký lên Admin hoặc dán file `key.txt` để kích hoạt.
+
+### 🧹 3. Sử dụng các tiện ích 1-Click:
+- Vào thư mục **`@File-BAT/`**, nhấp đúp chuột vào tiện ích cần dùng:  
   👉 **`[01]-Don-Dep-Bo-Nho-Tam-He-Thong.bat`**  
   *(Mẹo: Nếu muốn dọn cả mục Prefetch hoặc Windows Update, hãy chuột phải chọn **Run as administrator**).*
 3. **Thao tác trên Menu:**

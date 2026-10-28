@@ -1,0 +1,9 @@
+{
+  "id": "F01_CLEANER",
+  "name": "Dọn dẹp bộ nhớ tạm hệ thống",
+  "description": "Quét và dọn dẹp Temp, Recycle Bin, Windows Update Cache, Crash Dumps...",
+  "category": "Hệ thống",
+  "launcherBat": "[01]-Don-Dep-Bo-Nho-Tam-He-Thong.bat",
+  "entryPoint": "Core/Engine-Cleaner.ps1",
+  "version": "1.0.0"
+}

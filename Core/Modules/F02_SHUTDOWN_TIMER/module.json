@@ -1,0 +1,9 @@
+{
+  "id": "F02_SHUTDOWN_TIMER",
+  "name": "Hẹn giờ tắt máy tính tự động",
+  "description": "Đặt lịch hẹn giờ tắt máy, khởi động lại hoặc ngủ đông an toàn",
+  "category": "Hệ thống",
+  "launcherBat": "[02]-Hen-Gio-Tat-May.bat",
+  "entryPoint": "Core/Modules/F02_SHUTDOWN_TIMER/Engine-Shutdown.ps1",
+  "version": "1.0.0"
+}

@@ -1,0 +1,31 @@
+﻿{
+    "metadata":  {
+                     "version":  "1.0.0",
+                     "author":  "Mr. Tuan Beo (TuanBeoToolbox)",
+                     "lastUpdated":  "2026-10-28 16:39:55"
+                 },
+    "groups":  [
+                   {
+                       "groupId":  "GRP_DEFAULT",
+                       "groupName":  "Gói Mặc định (Tiêu chuẩn)",
+                       "description":  "Gói chức năng cơ bản phục vụ dọn dẹp và tối ưu hóa hệ thống nhẹ",
+                       "features":  {
+                                        "F01_CLEANER":  1,
+                                        "F02_SHUTDOWN_TIMER":  0,
+                                        "F03_NETWORK_TOOLS":  0,
+                                        "F04_SYSTEM_INFO":  0
+                                    }
+                   },
+                   {
+                       "groupId":  "GRP_ADVANCED",
+                       "groupName":  "Gói Chuyên sâu (Nâng cao)",
+                       "description":  "Gói toàn diện bao gồm đầy đủ tiện ích dọn dẹp, mạng và cấu hình",
+                       "features":  {
+                                        "F01_CLEANER":  1,
+                                        "F02_SHUTDOWN_TIMER":  0,
+                                        "F03_NETWORK_TOOLS":  1,
+                                        "F04_SYSTEM_INFO":  0
+                                    }
+                   }
+               ]
+}
