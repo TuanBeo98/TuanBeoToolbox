@@ -663,7 +663,10 @@ function Start-AdminConsole {
                 Wait-ForUserExit -Message " Nhấn phím bất kỳ để quay lại menu..."
             }
             "7" { Manage-SecurityAndRecovery }
-            "0" { break }
+            "0" { 
+                Write-Host "`n [OK] Đang thoát chương trình quản trị. Tạm biệt Anh Beo!`n" -ForegroundColor Green
+                return 
+            }
             default { Write-Host " Lựa chọn không hợp lệ!" -ForegroundColor Red; Start-Sleep -Seconds 1 }
         }
     }

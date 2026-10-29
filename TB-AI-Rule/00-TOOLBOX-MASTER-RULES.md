@@ -42,15 +42,25 @@
    - Module nghiệp vụ con: Đặt tại `Core/Modules/Fxx_TEN_MODULE/` (chứa `module.json` và script tương ứng).
    - Công cụ / Động cơ hệ thống: Đặt tại `Core/Engine-TenCongCu.ps1`.
    - Phím tắt khởi chạy: Đặt tại `@File-BAT/[STT]-Ten-Cong-Cu-Tu-Giai-Thich.bat`.
-2. **Quy chuẩn sinh mã `FNxxxx` tuần tự tăng 1 (`+1` Incremental Rule):**
-   - Mọi module/chức năng mới tạo đều **BẮT BUỘC ĐƯỢC CẤP MÃ `FNxxxx` THEO THỨ TỰ TĂNG DẦN ĐÚNG 1 ĐƠN VỊ (`+1`)**, đối soát mã cao nhất hiện có trong `00-Admin_Security/02_FUNCTIONS.md` để tăng kế tiếp (`Max + 1`).
-   - **TUYỆT ĐỐI CẤM** tăng ngẫu nhiên, cấm nhảy cóc lộn xộn để chống trùng lặp mã.
+2. **Quy chuẩn định danh phân nhóm `FN[GG][NN]` và nguyên tắc tăng tuần tự +1 nội bộ nhóm (Intra-Group Increment & Collision Guard):**
+   - **Cấu trúc Không Gian Tên `FN[GG][NN]`:**
+     * `[GG]` (2 chữ số đầu): Mã phân hệ/nhóm chức năng (Group Prefix): `00` System / Tiện ích cốt lõi (`FN0001` .. `FN0099`), `01` Frontend / UI WinForms, `02` Backend / Dịch vụ ngầm, `03` Config, `09` Database / Data, `99` Master Admin (`FN9999`).
+     * `[NN]` (2 chữ số cuối): Số thứ tự chức năng tuần tự trong nội bộ nhóm (`01` .. `99`).
+   - **Quy trình sinh mã và kiểm tra chống trùng lặp:**
+     * *Bước 1:* Xác định phân hệ của module mới tạo $\rightarrow$ xác định mã tiền tố `FN[GG]`.
+     * *Bước 2:* Đọc tệp `TB-AI-Rule/00-Admin_Security/02_FUNCTIONS.md`, lọc tất cả các mã bắt đầu bằng `FN[GG]`, tìm mã có số thứ tự `[NN]` lớn nhất trong nhóm đó (`Group_Max`).
+     * *Bước 3:* Cấp mã mới bằng `Group_Max + 1`. (Ví dụ: nhóm `00` đang có đến `FN0005` $\rightarrow$ mã mới kế tiếp bắt buộc là `FN0006`).
+     * *Bước 4:* Kiểm tra đối soát toàn bảng chống trùng lặp mã trước khi ghi nhận.
+   - **Các điều cấm tuyệt đối:**
+     * Tuyệt đối cấm lấy `FN9999` để tăng.
+     * Tuyệt đối cấm lấy Max của nhóm này gán cho nhóm khác.
+     * Tuyệt đối cấm nhảy cóc số thứ tự hoặc gán số ngẫu nhiên.
 3. **Quy chuẩn cấp quyền mặc định khi nạp chức năng mới:**
    - Khi tạo chức năng mới, AI tự động nạp vào `02_FUNCTIONS.md` và đồng bộ ma trận `03_PERM_MATRIX.md`:
      * *Mọi nhóm thường (`GF0000` đến `GF0900`):* Mặc định là **`0` (TẮT / Chưa cấp phép)**.
      * *Nhóm Admin Chủ Tối cao (`GF9999`):* Luôn luôn là **`1` (BẬT / Toàn quyền 100%)**.
    - AI bắt buộc thông báo rõ trong câu trả lời:
-     `📦 THÔNG BÁO VÒNG ĐỜI CHỨC NĂNG TOOLBOX: Đã nạp chức năng mới [FNxxxx - TênChứcNăng] vào danh mục hệ thống. Trạng thái mặc định: Tắt (0) cho các nhóm thường và Bật (1) cho Admin. Kỹ sư có thể mở [ADMIN-04] để phân quyền thêm cho các nhóm khác nếu muốn.`
+     `📦 THÔNG BÁO VÒNG ĐỜI CHỨC NĂNG TOOLBOX: Đã nạp chức năng mới [FNxxxx - TênChứcNăng] vào danh mục hệ thống. Trạng thái mặc định: Tắt (0) cho các nhóm thường và Bật (1) cho Admin. Kỹ sư có thể mở [ADMIN-100]-Quan-Ly-Phan-Quyen.bat để phân quyền thêm cho các nhóm khác nếu muốn.`
 4. **Quy chuẩn dọn dẹp khi xóa chức năng (Orphan Cleanup):**
    - Khi xóa module: Bắt buộc xóa mã `FNxxxx` khỏi `02_FUNCTIONS.md` và dọn dẹp khỏi toàn bộ các nhóm trong `03_PERM_MATRIX.md`.
 
@@ -117,7 +127,7 @@ Mọi file BAT trong `@File-BAT/@Administrator/` bắt buộc đặt tên theo m
 
 ## 🔓 10. CHỐNG BÁO ĐỘNG GIẢ ANTIVIRUS & TỰ ĐỘNG GỠ CỜ KHÓA TỆP MẠNG
 1. Mọi file BAT đều có dòng lệnh ngầm tự động gỡ cờ Mark of the Web (`Unblock-File`).
-2. Cung cấp file tiện ích: `[TB-00]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat` tại `@File-BAT/`.
+2. Cung cấp file tiện ích: `[000]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat` tại `@File-BAT/`.
 3. Mã nguồn viết rõ ràng, không làm mờ code (obfuscation), có tiêu đề bản quyền `Kỹ sư: Đào Xuân Tuấn (Tuấn Beo)`.
 
 ---

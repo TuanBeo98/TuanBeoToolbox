@@ -1,9 +1,9 @@
 {
   "id": "F02_SHUTDOWN_TIMER",
-  "name": "Hẹn giờ tắt máy tính tự động",
-  "description": "Đặt lịch hẹn giờ tắt máy, khởi động lại hoặc ngủ đông an toàn",
+  "name": "Hẹn giờ Tắt máy & Quản lý Nguồn điện",
+  "description": "Hẹn giờ tắt máy, khởi động lại, ngủ đông, chống ngủ máy Awake và quản lý cấu hình nguồn điện",
   "category": "Hệ thống",
-  "launcherBat": "[02]-Hen-Gio-Tat-May.bat",
-  "entryPoint": "Core/Modules/F02_SHUTDOWN_TIMER/Engine-Shutdown.ps1",
+  "launcherBat": "[501]-Hen-Gio-Tat-May-Va-Quan-Ly-Nguon.bat",
+  "entryPoint": "Core/Engine-PowerManager.ps1",
   "version": "1.0.0"
 }

@@ -43,7 +43,7 @@ function Sync-ClientLaunchers {
 
     # Module F01: Dọn dẹp bộ nhớ tạm
     $cleanerBat = Join-Path $BAT_DIR "[500]-Don-Dep-Bo-Nho-Tam-He-Thong.bat"
-    if ($featuresDict["F01_CLEANER"] -eq 1) {
+    if ($featuresDict["F01_CLEANER"] -eq 1 -or $featuresDict["FN0001"] -eq 1) {
         if (-not (Test-Path $cleanerBat)) {
             $cleanerContent = "@echo off`r`nsetlocal`r`ncd /d `"%~dp0`"`r`ntitle [500] Don Dep Bo Nho Tam He Thong - TuanBeo Toolbox`r`nchcp 65001 >nul 2>&1`r`n`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`..\\Core\\Engine-Cleaner.ps1`"`r`nexit /b`r`n"
             [System.IO.File]::WriteAllText($cleanerBat, $cleanerContent, [System.Text.Encoding]::ASCII)
@@ -51,6 +51,18 @@ function Sync-ClientLaunchers {
     } else {
         # Nếu bị thu hồi / không được cấp -> Tự động thu hồi / xóa file launcher
         if (Test-Path $cleanerBat) { Remove-Item $cleanerBat -Force -ErrorAction SilentlyContinue }
+    }
+
+    # Module F02: Hẹn giờ tắt máy & Quản lý nguồn điện
+    $powerBat = Join-Path $BAT_DIR "[501]-Hen-Gio-Tat-May-Va-Quan-Ly-Nguon.bat"
+    if ($featuresDict["F02_SHUTDOWN_TIMER"] -eq 1 -or $featuresDict["FN0002"] -eq 1) {
+        if (-not (Test-Path $powerBat)) {
+            $powerContent = "@echo off`r`nsetlocal`r`ncd /d `"%~dp0`"`r`ntitle [501] Hen Gio Tat May Va Quan Ly Nguon - TuanBeo Toolbox`r`nchcp 65001 >nul 2>&1`r`n`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`..\\Core\\Engine-PowerManager.ps1`"`r`nexit /b`r`n"
+            [System.IO.File]::WriteAllText($powerBat, $powerContent, [System.Text.Encoding]::ASCII)
+        }
+    } else {
+        # Nếu bị thu hồi / không được cấp -> Tự động thu hồi / xóa file launcher
+        if (Test-Path $powerBat) { Remove-Item $powerBat -Force -ErrorAction SilentlyContinue }
     }
 }
 

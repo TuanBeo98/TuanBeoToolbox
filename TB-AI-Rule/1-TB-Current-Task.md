@@ -9,3 +9,7 @@
 - **Phân hệ:** TB-Toolbox Core
 - **Nhánh Git (Branch):** main
 - **Trạng thái:** [STANDBY]
+---
+
+## 📜 SỔ CÁI TIẾN HÓA QUY TẮC (RULE CHANGE LOG)
+- **Sổ cái quy tắc tập trung:** [99-RULE-CHANGE-LOG.md](TB-AI-Rule/99-RULE-CHANGE-LOG.md) (Tra cứu 31 phiên bản tiến hóa hệ thống từ TBRULE-01 đến TBRULE-31).

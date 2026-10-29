@@ -48,7 +48,9 @@ flowchart TD
 
 ### Bước 2: Thêm mới chức năng / Quy tắc
 - Khi tạo chức năng mới trong Toolbox hoặc Rule mới trong AI:
-  * Mã chức năng bắt buộc mang mã: **`FNxxxx`** tăng tuần tự +1 (`Max + 1`).
+  * Xác định đúng phân hệ (`00` System, `01` Frontend, `02` Backend, `03` Config, `09` Database).
+  * Tra cứu `02_FUNCTIONS.md` và sinh mã **`FN[GG][NN]` tăng tuần tự +1 theo đúng nhóm đó (`Group_Max + 1`)**.
+  * Kiểm tra đối soát chống trùng lặp mã trước khi ghi nhận. Tuyệt đối không lấy `FN9999` để tăng.
   * Trạng thái mặc định: Tắt (`0`) cho nhóm thường, Bật (`1`) cho Admin.
 
 ### Bước 3: Điều phối ma trận phân quyền

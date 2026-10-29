@@ -24,6 +24,9 @@ Mọi hành động, phản hồi, chẩn đoán và sinh mã nguồn trong toà
 👉 **NHẬT KÝ BÀN GIAO TRẠNG THÁI TASK:**  
 [TB-AI-Rule/1-TB-Current-Task.md](TB-AI-Rule/1-TB-Current-Task.md)
 
+👉 **SỔ CÁI LỊCH SỬ TIẾN HÓA QUY TẮC:**  
+[TB-AI-Rule/99-RULE-CHANGE-LOG.md](TB-AI-Rule/99-RULE-CHANGE-LOG.md)
+
 ---
 
 ## 🔒 RANH GIỚI BẢO MẬT & PHÂN QUYỀN 2 THÁI CỰC (ADMIN VS. CLIENT)
@@ -46,13 +49,14 @@ Mọi hành động, phản hồi, chẩn đoán và sinh mã nguồn trong toà
 2. **Cổng Phê Duyệt Bắt Buộc Toàn Cục (Strict Confirmation Gate):**
    - Quét mã nguồn -> Xuất Bảng Phân tích & Chẩn đoán -> **DỪNG LẠI NGAY LẬP TỨC (HALT)** chờ Kỹ sư ("Anh Beo") phê duyệt rõ ràng ("OK", "Đồng ý"...) mới được can thiệp code.
    - Ưu tiên giải đáp 100% câu hỏi trước khi bắt tay vào làm việc.
-3. **Quy Chuẩn Sinh Mã `FNxxxx` Tuần Tự Tăng 1 (+1 Incremental Rule):**
-   - Mọi module/chức năng mới tạo đều **BẮT BUỘC ĐƯỢC CẤP MÃ `FNxxxx` THEO THỨ TỰ TĂNG DẦN ĐÚNG 1 ĐƠN VỊ (`+1`)**, đối soát mã cao nhất trong `TB-AI-Rule/00-Admin_Security/02_FUNCTIONS.md` để tăng kế tiếp (`Max + 1`).
-   - Tuyệt đối cấm gán mã ngẫu nhiên, cấm nhảy cóc lộn xộn.
+3. **Quy Chuẩn Định Danh Phân Nhóm `FN[GG][NN]` & Tăng Tuần Tự +1 Nội Bộ Nhóm:**
+   - Cấu trúc `FN[GG][NN]`: `[GG]` là phân hệ (`00` System, `01` Frontend, `02` Backend, `03` Config, `09` Database, `99` Admin), `[NN]` là số thứ tự `01`..`99` trong nhóm đó.
+   - Khi tạo chức năng mới: Bắt buộc đọc `02_FUNCTIONS.md`, lọc theo tiền tố `FN[GG]`, tìm số lớn nhất trong nhóm đó (`Group_Max`) và cấp mã bằng `Group_Max + 1`. (Ví dụ: `FN0005` -> `FN0006`). Bắt buộc đối soát chống trùng lặp mã trước khi ghi.
+   - Tuyệt đối cấm lấy `FN9999` để tăng, không lấy Max của nhóm này gán cho nhóm khác, không nhảy cóc số thứ tự.
 4. **Quy Chuẩn Cấp Quyền Mặc Định Khi Tạo Chức Năng Mới:**
    - Mọi nhóm thường (`GF0000` đến `GF0900`): Mặc định là **`0` (TẮT)**.
    - Nhóm Admin Chủ Tối cao (`GF9999`): Luôn luôn là **`1` (BẬT)**.
-   - AI bắt buộc thông báo rõ cho Anh Beo trong câu trả lời kèm hướng dẫn mở `[ADMIN-04]` để phân quyền nếu muốn.
+   - AI bắt buộc thông báo rõ cho Anh Beo trong câu trả lời kèm hướng dẫn mở `[ADMIN-100]-Quan-Ly-Phan-Quyen.bat` để phân quyền nếu muốn.
    - Khi xóa module: Bắt buộc xóa khỏi `02_FUNCTIONS.md` và dọn dẹp khỏi `03_PERM_MATRIX.md`.
 5. **Bảo Toàn Định Dạng UTF-8 Codepage 65001 & Giao Diện Console Sắc Nét:**
    - Tất cả `.ps1` và `.md` lưu UTF-8 with BOM (`EF BB BF`).
@@ -74,7 +78,7 @@ Mọi hành động, phản hồi, chẩn đoán và sinh mã nguồn trong toà
 9. **Quy Chuẩn Bảo Toàn Trạng Thái & Logs Khi Cập Nhật:**
    - Thư mục `Engine/Logs/` và file cấu hình cá nhân `Engine/Config/cleaner-config.json` bắt buộc bảo toàn nguyên vẹn 100%.
 10. **Chống Báo Động Giả Antivirus & Hướng Dẫn Sử Dụng:**
-    - Cung cấp `[TB-00]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat`.
+    - Cung cấp `[000]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat`.
     - Thư mục `@Huong-Dan-Admin/` là tài liệu tối mật dành riêng cho Admin, loại trừ 100% khỏi bản phân phối Client.
     - Thư mục gốc có file `!00-HUONG-DAN-SU-DUNG-CHO-NGUOI-DUNG.md` hướng dẫn 4 bước cho người dùng.
 
