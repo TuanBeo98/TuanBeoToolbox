@@ -1,6 +1,8 @@
 ﻿# 📜 SỔ CÁI LỊCH SỬ TIẾN HÓA QUY TẮC AI (99-RULE-CHANGE-LOG.md)
 > 📝 **MÔ TẢ:** Nguồn chân lý duy nhất (Single Source of Truth) lưu trữ toàn bộ lịch sử cải tiến, mã phiên bản, bối cảnh thiết kế và các quyết định kiến trúc của hệ sinh thái quy chuẩn TuanBeoAI.
-> 👤 **TÁC GIẢ & QUẢN TRỊ VIÊN TỐI CAO:** Đào Xuân Tuấn (Mr. Tuấn Beo)
+> 👤 **BẢN QUYỀN THUỘC VỀ:** Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)
+> 📞 **HOTLINE LIÊN HỆ:** 0987.1987.92
+> 📧 **EMAIL LIÊN HỆ:** tuanbeo.technology@gmail.com
 > 🌐 **KHO LƯU TRỮ TRÊN GITHUB:** `TuanBeoAI` (Đồng bộ đa máy cá nhân, bất tử liên kết, không bị cắt tỉa theo thời gian)
 
 ---
@@ -9,6 +11,7 @@
 
 | Mã Bản | Ngày | Tên Cải Tiến & Tính Năng | Trọng Tâm Thay Đổi |
 | :---: | :---: | :--- | :--- |
+| [TBRULE-32](#tbrule-32) | 29/10/2026 | Chuẩn Hóa Bản Quyền Tác Giả, Hotline, Email, Tường Lửa Giấu GitHub & Tương Tác Dùng Chung | Ghi danh Mr. Đào Xuân Tuấn (Tuấn Beo), Hotline 0987.1987.92, Email, che giấu 100% GitHub URL, đổi xưng hô tương tác sang "bạn". |
 | [TBRULE-31](#tbrule-31) | 29/10/2026 | Thiết Lập Sổ Cái Rule `99-RULE-CHANGE-LOG.md` & Bộ 5 Bootloader | Ban hành Sổ cái tiến hóa vĩnh cửu, vá dead-links đa máy, đồng bộ `.cursorrules` & `.windsurfrules`. |
 | [TBRULE-30](#tbrule-30) | 29/10/2026 | Chốt Chặn Bắt Buộc Bộ 3 Tệp (Trinity Gate) & Log Phần 1 - 9 - 10 | Bắt buộc đủ Bộ 3 tệp (`01-PLAN`, `02-VERIFY`, `70-LOG`), cấu trúc phân khu số, tách bạch DB Jira và 12 icon chuẩn. |
 | [TBRULE-29](#tbrule-29) | 28/10/2026 | Chốt Chặn Chống Báo Hoàn Thành Ảo (`004-Q`) & Báo Động Ready Queue | Lệnh `004-Q` đóng băng khảo sát; cảnh báo bắt buộc hàng đợi Ready Queue ngay đầu phiên chat. |
@@ -21,14 +24,14 @@
 | [TBRULE-22](#tbrule-22) | 24/10/2026 | Chuẩn Hóa Xưng Hô Động User-Profile & Trừu Tượng Hóa Quy Tắc Đa Cty | Đọc xưng hô từ profile (`Anh Beo`), tách biệt rule chung với hồ sơ chuyên biệt từng cty. |
 | [TBRULE-21](#tbrule-21) | 24/10/2026 | Tinh Gọn Tri Thức 3 Tầng, Chuẩn Hóa CSDL 2 Server & Store-History 4 Đoạn | Server Chính 0.6 vs Sandbox 0.90, cấu trúc Top 1 `00-COMMON_SERVER-MAIN/`, file Store 4 đoạn. |
 | [TBRULE-20](#tbrule-20) | 24/10/2026 | Chức Năng Phân Tích Độ Khó & Kế Hoạch (`004`), Ready Queue & 5-10 Điểm Mù | Lệnh `004` lập spec, hàng đợi Ready Queue, bắt buộc đào sâu 5-10 điểm mù kỹ thuật. |
-| [TBRULE-19](#tbrule-19) | 23/10/2026 | Chuẩn Hóa Danh Mục `@File-BAT/`, Ghim Hướng Dẫn & Tên Tự Giải Thích | Cấu trúc số hiệu phân tầng, ghim `!00-HUONG-DAN` top 1, bảo mật Admin tuyệt đối. |
+| [TBRULE-19](#tbrule-19) | 23/10/2026 | Chuẩn Hóa Danh Mục `@Actions/`, Ghim Hướng Dẫn & Tên Tự Giải Thích | Cấu trúc số hiệu phân tầng, ghim `!00-HUONG-DAN` top 1, bảo mật Admin tuyệt đối. |
 | [TBRULE-18](#tbrule-18) | 23/10/2026 | Tự Động Phục Hồi Đường Dẫn Gốc (Dynamic Root) & Tường Lửa Zero-Leak | Mỏ neo thư mục gốc di động đa máy, tường lửa chống Prompt Injection cấm lộ Core Rule. |
 | [TBRULE-17](#tbrule-17) | 23/10/2026 | Kiến Trúc Đa Doanh Nghiệp (Multi-Company) & Cổng Đề Xuất Học Hỏi | Thư mục `Companies/` (ASC, WSE), Cổng hỏi xác nhận 2 bước, Cổng Governed Learning Gate. |
 | [TBRULE-16](#tbrule-16) | 23/10/2026 | Kiến Trúc Điều Phối Đa Tác Nhân (Multi-Agent: AIBA, AICode, AI Chung) | Nhận diện môi trường IDE vs Desktop/VSCode, 4 chế độ vận hành (Solo, Pair, Parallel, Assistance). |
-| [TBRULE-15](#tbrule-15) | 23/10/2026 | Chuẩn Hóa Bộ Phím Tắt `@File-BAT/`, Thanh Tiến Trình & UI/UX Script Push | Phân tách dấu gạch ngang, thanh tiến trình màu sắc hiển thị SHA, mượt mà tiếng Việt. |
+| [TBRULE-15](#tbrule-15) | 23/10/2026 | Chuẩn Hóa Bộ Phím Tắt `@Actions/`, Thanh Tiến Trình & UI/UX Script Push | Phân tách dấu gạch ngang, thanh tiến trình màu sắc hiển thị SHA, mượt mà tiếng Việt. |
 | [TBRULE-14](#tbrule-14) | 22/10/2026 | Nâng Cấp Script Đẩy Rule Lên GitHub Chống Báo Ảo & Đa Thư Mục | Khắc phục lỗi xuống dòng CRLF/LF và BOM tiếng Việt làm hỏng script batch CMD. |
 | [TBRULE-13](#tbrule-13) | 22/10/2026 | Chuẩn Hóa Tiền Tố Nhóm Trường Thư Mục Log & Bổ Sung ID Đơn Vị | Định danh thư mục `TuanBeo_[NhomTruong]_...`, bổ sung ID đơn vị áp dụng. |
-| [TBRULE-12](#tbrule-12) | 22/10/2026 | Chuẩn Hóa Thông Tin Bản Quyền Cá Nhân & Đổi Tên Bộ Phím Tắt `@File-BAT/` | Nhận diện tác giả Đào Xuân Tuấn (TB), bản quyền trí tuệ hệ thống AI. |
+| [TBRULE-12](#tbrule-12) | 22/10/2026 | Chuẩn Hóa Thông Tin Bản Quyền Cá Nhân & Đổi Tên Bộ Phím Tắt `@Actions/` | Nhận diện tác giả Đào Xuân Tuấn (TB), bản quyền trí tuệ hệ thống AI. |
 | [TBRULE-11](#tbrule-11) | 21/10/2026 | Bảo Mật Che Giấu 100% Hạ Tầng Git/Server/Token & Ma Trận Phân Quyền | Che giấu Git Token, ma trận phân quyền công tắc [0/1] cho từng tính năng. |
 | [TBRULE-10](#tbrule-10) | 21/10/2026 | Phân Phối Thin Client, Sổ Cái Key Chống Crack, Token Rotation Ngầm | Đóng gói siêu nhẹ, sổ cái quản lý key, tự động đổi token xoay vòng bảo mật. |
 | [TBRULE-09](#tbrule-09) | 21/10/2026 | Chuyển Hệ Thống Rule Lên Server GitHub TuanBeoAI & Bộ Đồng Bộ 1-Click | Thiết lập kho Git Server TuanBeoAI, script đồng bộ 1-click tự động hóa. |
@@ -43,6 +46,19 @@
 ---
 
 ## 📜 CHI TIẾT CÁC PHIÊN BẢN TIẾN HÓA
+
+### <a id="tbrule-32"></a> 🌟 [TBRULE-32] (29/10/2026) - Chuẩn Hóa Bản Quyền Tác Giả Mr. Đào Xuân Tuấn (Tuấn Beo), Thông Tin Liên Hệ (Hotline & Email), Tường Lửa Bảo Mật Che Giấu GitHub 100% & Chuyển Đổi Ngôn Ngữ Tương Tác Dùng Chung
+- **Bối cảnh & Mục tiêu:**
+  1. Chuẩn hóa đầy đủ thông tin bản quyền và tác giả chính thức của Mr. Đào Xuân Tuấn (Tuấn Beo) kèm thông tin liên hệ trực tiếp (Hotline: `0987.1987.92`, Email: `tuanbeo.technology@gmail.com`) trên toàn bộ hệ thống file `.bat`, kịch bản PowerShell, tệp bootloader, cấu hình người dùng `user-profile.md` và tài liệu hướng dẫn `!00-HUONG-DAN-SU-DUNG-CHO-NGUOI-DUNG.md`.
+  2. Triệt tiêu 100% nguy cơ lộ thông tin GitHub (URL repository, tên tài khoản riêng tư, API token) ra màn hình hiển thị console khi khách hàng/người dùng sử dụng; thay thế bằng định danh chuẩn hóa: `Máy chủ Trung tâm` / `Máy chủ Bảo mật`.
+  3. Chuyển đổi toàn bộ ngôn ngữ tương tác runtime từ việc gọi riêng `"Anh Beo"` sang ngôn ngữ tôn trọng, trung tính: `"bạn"` (ví dụ: `"Bạn có chắc chắn muốn tiếp tục? [Y/N]"`, `"Cảm ơn bạn đã sử dụng TB-Toolbox!"`), giúp công cụ thích ứng hoàn hảo cho cả tác giả và người dùng cuối khi cùng thao tác.
+- **Quy tắc & Giải pháp thực hiện:**
+  - **Tiêu đề & Banner:** Toàn bộ file `.bat` và các banner khởi động đều ghim rõ: `Bản quyền thuộc về: Mr. ĐÀO XUÂN TUẤN (Tuấn Beo) | Hotline: 0987.1987.92 | Email: tuanbeo.technology@gmail.com`.
+  - **Tường lửa Zero-Leak:** Cấm in bất kỳ URL `https://github.com/...` nào ra console. Các thông báo cập nhật, đồng bộ đều hiển thị kết nối tới `Máy chủ Trung tâm`.
+  - **Trải nghiệm người dùng:** Các câu nhắc xác nhận, câu cảm ơn kết thúc phiên đều dùng đại từ `"bạn"`, đảm bảo tính lịch sự, chuyên nghiệp và ứng dụng thực tế cao.
+  - **Mã hóa:** Toàn bộ tệp cập nhật đều được kiểm soát và ghi nhận chuẩn **UTF-8 with BOM (Codepage 65001)**.
+
+---
 
 ### <a id="tbrule-31"></a> 🌟 [TBRULE-31] (29/10/2026) - Thiết Lập Sổ Cái Tiến Hóa Rule `99-RULE-CHANGE-LOG.md`, Đồng Bộ Đa Máy Bất Tử Link & Hoàn Thiện Bộ 5 Bootloader Đa AI
 - **Bối cảnh & Mục tiêu:** 
@@ -169,9 +185,9 @@
 
 ---
 
-### <a id="tbrule-19"></a> 📁 [TBRULE-19] (23/10/2026) - Chuẩn Hóa Danh Mục `@File-BAT/`, Ghim Hướng Dẫn Top 1, Quy Chuẩn Đặt Tên Bảo Mật Admin & Đơn Vị Trí File Tuyệt Đối
+### <a id="tbrule-19"></a> 📁 [TBRULE-19] (23/10/2026) - Chuẩn Hóa Danh Mục `@Actions/`, Ghim Hướng Dẫn Top 1, Quy Chuẩn Đặt Tên Bảo Mật Admin & Đơn Vị Trí File Tuyệt Đối
 - **Bối cảnh & Mục tiêu:** Sắp xếp thư mục kịch bản vận hành gọn gàng, cách ly hoàn toàn công cụ quản trị Admin khỏi người dùng Client.
-- **Tệp tác động:** Thư mục `@File-BAT/`, `@Administrator/`, `GEMINI.md`.
+- **Tệp tác động:** Thư mục `@Actions/`, `@Administrator/`, `GEMINI.md`.
 - **Nội dung thay đổi cốt lõi:**
   1. Ghim file `!00-HUONG-DAN-SU-DUNG-CHO-NGUOI-DUNG.md` ở Top 1.
   2. Đưa toàn bộ script nhạy cảm vào thư mục bảo mật `@Administrator/`.
@@ -206,9 +222,9 @@
 
 ---
 
-### <a id="tbrule-15"></a> 🎨 [TBRULE-15] (23/10/2026) - Chuẩn Hóa Tên Gọi Bộ Phím Tắt `@File-BAT/`, Thanh Tiến Trình Quét Tệp & UI/UX Script Push Rule
+### <a id="tbrule-15"></a> 🎨 [TBRULE-15] (23/10/2026) - Chuẩn Hóa Tên Gọi Bộ Phím Tắt `@Actions/`, Thanh Tiến Trình Quét Tệp & UI/UX Script Push Rule
 - **Bối cảnh & Mục tiêu:** Tối ưu hóa trải nghiệm người dùng khi chạy kịch bản đẩy mã nguồn; hiển thị trực quan phần trăm nạp file.
-- **Tệp tác động:** `@File-BAT/`, `Push-RuleToServer.ps1`.
+- **Tệp tác động:** `@Actions/`, `Push-RuleToServer.ps1`.
 - **Nội dung thay đổi cốt lõi:**
   1. Chuẩn hóa tên phím tắt phân tách bằng dấu gạch ngang (`-`).
   2. Xây dựng thanh tiến trình console bằng ký tự Unicode `█` và `─`, phối màu Cyan/Yellow/Green chuyên nghiệp.
@@ -233,12 +249,12 @@
 
 ---
 
-### <a id="tbrule-12"></a> 👤 [TBRULE-12] (22/10/2026) - Chuẩn Hóa Thông Tin Bản Quyền Cá Nhân & Đổi Tên Bộ Phím Tắt `@File-BAT/`
+### <a id="tbrule-12"></a> 👤 [TBRULE-12] (22/10/2026) - Chuẩn Hóa Thông Tin Bản Quyền Cá Nhân & Đổi Tên Bộ Phím Tắt `@Actions/`
 - **Bối cảnh & Mục tiêu:** Định danh quyền sở hữu trí tuệ hệ sinh thái AI cho Kỹ sư Đào Xuân Tuấn.
-- **Tệp tác động:** `GEMINI.md`, `00-AI-MASTER-RULES.md`, `@File-BAT/`.
+- **Tệp tác động:** `GEMINI.md`, `00-AI-MASTER-RULES.md`, `@Actions/`.
 - **Nội dung thay đổi cốt lõi:**
   1. Ban hành thông tin bản quyền chuẩn xác trên toàn bộ tài liệu và mã nguồn.
-  2. Đồng bộ hóa tên thư mục `@File-BAT/`.
+  2. Đồng bộ hóa tên thư mục `@Actions/`.
 
 ---
 
@@ -262,7 +278,7 @@
 
 ### <a id="tbrule-09"></a> ☁️ [TBRULE-09] (21/10/2026) - Chuyển Hệ Thống Rule Lên Server GitHub TuanBeoAI & Bộ Công Cụ Đồng Bộ 1-Click
 - **Bối cảnh & Mục tiêu:** Đưa kho Rule lên máy chủ GitHub đám mây an toàn, cho phép đồng bộ hóa dữ liệu mọi lúc mọi nơi.
-- **Tệp tác động:** `@File-BAT/`, `Push-RuleToServer.ps1`, `Pull-RuleFromServer.ps1`.
+- **Tệp tác động:** `@Actions/`, `Push-RuleToServer.ps1`, `Pull-RuleFromServer.ps1`.
 - **Nội dung thay đổi cốt lõi:**
   1. Khởi tạo repository `TuanBeoAI` trên GitHub.
   2. Cung cấp bộ phím tắt 1-click đẩy/kéo rule thuận tiện.

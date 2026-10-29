@@ -1,4 +1,4 @@
-# HỆ THỐNG QUY TẮC TỐI CAO TB-TOOLBOX (00-TOOLBOX-MASTER-RULES.md)
+﻿# HỆ THỐNG QUY TẮC TỐI CAO TB-TOOLBOX (00-TOOLBOX-MASTER-RULES.md)
 > 📝 **MÔ TẢ:** Tệp quy tắc gốc trung tâm tối cao (Single Source of Truth) áp dụng đồng bộ cho toàn bộ các mô hình AI khi làm việc trên hệ thống TB-Toolbox.
 > 📁 **VỊ TRÍ:** `TB-Toolbox/TB-AI-Rule/00-TOOLBOX-MASTER-RULES.md` (tính từ thư mục gốc `{TOOLBOX_ROOT}`)
 > 👤 **BẢN QUYỀN THUỘC VỀ:** Đào Xuân Tuấn (Mr. Tuấn Beo)
@@ -28,12 +28,12 @@
 1. **Phía Admin Quản Trị Hệ Thống (Mr. Tuấn Beo - Master Owner):**
    - Toàn quyền sử dụng rule, xem và sửa đổi toàn bộ mã nguồn của hệ thống TB-Toolbox (`Core/`, `Config/`, `Core/Modules/`, `TB-AI-Rule/`).
    - Toàn quyền thêm mới, chỉnh sửa, nâng cấp và dọn dẹp các module tiện ích của Toolbox.
-   - Toàn quyền quản trị bản quyền, cấp phép, đăng ký tài khoản và phân quyền ma trận qua `@File-BAT/@Administrator/[ADMIN-04]-Quan-Ly-Phan-Quyen.bat`.
+   - Toàn quyền quản trị bản quyền, cấp phép, đăng ký tài khoản và phân quyền ma trận qua `@Actions/@Administrator/[ADMIN-04]-Quan-Ly-Phan-Quyen.bat`.
    - Được phép và bắt buộc đẩy mã nguồn lên GitHub Server qua `[ADMIN-03]-Push-Toolbox-Len-Server.bat` để đồng bộ làm việc liền mạch trên mọi máy tính cá nhân của Admin.
 2. **Phía Người Dùng Tiếp Nhận (Client Distribution):**
    - **Chế độ Sử Dụng Thuần Túy (Usage-Only Blackbox):** Người dùng chỉ tải các module/chức năng đã được cấp phép về để sử dụng (có chức năng nào thì dùng chức năng đó).
    - **Tuyệt đối không can thiệp vào Rule:** Người dùng không có quyền sửa đổi rule, không có quyền tạo/viết chức năng mới vào hệ thống.
-   - **Tuyệt đối cấm xem, cấm có mặt các file quản trị:** Thư mục `TB-AI-Rule/00-Admin_Security/` và `@File-BAT/@Administrator/` **TUYỆT ĐỐI BỊ LOẠI TRỪ 100% KHỎI BỘ CÀI ĐẶT CỦA CLIENT**, triệt tiêu vĩnh viễn rủi ro lộ ma trận phân quyền hay thông tin tài khoản.
+   - **Tuyệt đối cấm xem, cấm có mặt các file quản trị:** Thư mục `TB-AI-Rule/00-Admin_Security/` và `@Actions/@Administrator/` **TUYỆT ĐỐI BỊ LOẠI TRỪ 100% KHỎI BỘ CÀI ĐẶT CỦA CLIENT**, triệt tiêu vĩnh viễn rủi ro lộ ma trận phân quyền hay thông tin tài khoản.
 
 ---
 
@@ -41,7 +41,7 @@
 1. **Quy chuẩn đặt tên Module / Chức năng:**
    - Module nghiệp vụ con: Đặt tại `Core/Modules/Fxx_TEN_MODULE/` (chứa `module.json` và script tương ứng).
    - Công cụ / Động cơ hệ thống: Đặt tại `Core/Engine-TenCongCu.ps1`.
-   - Phím tắt khởi chạy: Đặt tại `@File-BAT/[STT]-Ten-Cong-Cu-Tu-Giai-Thich.bat`.
+   - Phím tắt khởi chạy: Đặt tại `@Actions/[STT]-Ten-Cong-Cu-Tu-Giai-Thich.bat`.
 2. **Quy chuẩn định danh phân nhóm `FN[GG][NN]` và nguyên tắc tăng tuần tự +1 nội bộ nhóm (Intra-Group Increment & Collision Guard):**
    - **Cấu trúc Không Gian Tên `FN[GG][NN]`:**
      * `[GG]` (2 chữ số đầu): Mã phân hệ/nhóm chức năng (Group Prefix): `00` System / Tiện ích cốt lõi (`FN0001` .. `FN0099`), `01` Frontend / UI WinForms, `02` Backend / Dịch vụ ngầm, `03` Config, `09` Database / Data, `99` Master Admin (`FN9999`).
@@ -102,7 +102,7 @@
 ---
 
 ## 🛡️ 7. QUY CHUẨN PHÂN TẦNG SỐ HIỆU KỊCH BẢN QUẢN TRỊ [ADMIN-xxx]
-Mọi file BAT trong `@File-BAT/@Administrator/` bắt buộc đặt tên theo mã số 3 chữ số:
+Mọi file BAT trong `@Actions/@Administrator/` bắt buộc đặt tên theo mã số 3 chữ số:
 - **`[ADMIN-001]` đến `[ADMIN-099]`**: Tầng Thao tác hàng ngày / Git & Server (`[ADMIN-001]-Push-Source-To-Server.bat`, `[ADMIN-002]-Xac-Thuc-Dong-Bo-Server.bat`).
 - **`[ADMIN-100]` đến `[ADMIN-199]`**: Tầng Quản lý nghiệp vụ & Phân quyền chức năng (`[ADMIN-100]-Quan-Ly-Phan-Quyen.bat`).
 - **`[ADMIN-200]` đến `[ADMIN-299]`**: Tầng Đóng gói xuất xưởng & Cấp phát Token User (`[ADMIN-200]-Dong-Goi-Ban-Client.bat`, `[ADMIN-201]-Tao-Token-Ban-Quyen.bat`).
@@ -127,14 +127,14 @@ Mọi file BAT trong `@File-BAT/@Administrator/` bắt buộc đặt tên theo m
 
 ## 🔓 10. CHỐNG BÁO ĐỘNG GIẢ ANTIVIRUS & TỰ ĐỘNG GỠ CỜ KHÓA TỆP MẠNG
 1. Mọi file BAT đều có dòng lệnh ngầm tự động gỡ cờ Mark of the Web (`Unblock-File`).
-2. Cung cấp file tiện ích: `[000]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat` tại `@File-BAT/`.
+2. Cung cấp file tiện ích: `[000]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat` tại `@Actions/`.
 3. Mã nguồn viết rõ ràng, không làm mờ code (obfuscation), có tiêu đề bản quyền `Kỹ sư: Đào Xuân Tuấn (Tuấn Beo)`.
 
 ---
 
 ## 📚 11. QUY CHUẨN TÀI LIỆU HƯỚNG DẪN CHO ADMIN VÀ NGƯỜI DÙNG
 1. **Tài liệu Quản trị Tối mật cho Admin (`@Huong-Dan-Admin/`):**
-   - Đặt tại `@File-BAT/@Administrator/@Huong-Dan-Admin/`.
+   - Đặt tại `@Actions/@Administrator/@Huong-Dan-Admin/`.
    - Bị loại trừ 100% khi đóng gói xuất xưởng Client.
    - Gồm 2 file: `01-HUONG-DAN-CHU-KY-SO-VA-DONG-BO-DA-MAY-CHO-ADMIN.md` và `02-QUY-TRINH-VAN-HANH-VA-VONG-DOI-HE-THONG.md`.
 2. **Tài liệu Hướng dẫn Người dùng:**
@@ -144,7 +144,7 @@ Mọi file BAT trong `@File-BAT/@Administrator/` bắt buộc đặt tên theo m
 ---
 
 ## 🎯 12. QUY CHUẨN PHÂN TẦNG SỐ HIỆU KỊCH BẢN NGƯỜI DÙNG [xxx], TIẾN TRÌNH HYDRATION & CAM KẾT PUSH GIT ADMIN
-1. **Phân tầng số hiệu 3 chữ số tầng Người dùng (`@File-BAT/`):**
+1. **Phân tầng số hiệu 3 chữ số tầng Người dùng (`@Actions/`):**
    - `[000]` (Bất biến): Kiểm tra môi trường & Giải phóng chặn mạng (`[000]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat`).
    - `[001]` đến `[099]`: Khởi động và cài đặt (`[001]-Cai-Dat-TB-Toolbox.bat`, `[002]-Nhap-Key-Kich-Hoat.bat`).
    - `[100]` đến `[199]`: Kiểm tra trạng thái hệ thống (`[100]-Kiem-Tra-Trang-Thai-Toolbox.bat`).

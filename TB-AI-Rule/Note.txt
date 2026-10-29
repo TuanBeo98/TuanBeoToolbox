@@ -73,14 +73,14 @@ Quy ước công tắc tính năng: `1 = BẬT (Enable)` | `0 = TẮT (Disable)`
      + Khi đó, quyền thực tế của người dùng sẽ lấy chính xác theo danh sách tính năng đã được Admin can thiệp và phê duyệt sau cùng cho tài khoản đó.
    - **Đồng bộ hai chiều tức thì xuống Client (Real-time Client Sync):**
      + Sau khi Admin cập nhật trên Server, phía người dùng khi mở Toolbox (hoặc bấm "Đồng bộ bản quyền"):
-       * Tính năng được Admin bật thêm ➔ Tự động tải nạp về máy và sinh file launcher `@File-BAT/` tương ứng.
+       * Tính năng được Admin bật thêm ➔ Tự động tải nạp về máy và sinh file launcher `@Actions/` tương ứng.
        * Tính năng bị Admin bỏ bớt ➔ Tự động vô hiệu hóa và xóa sạch file script/launcher cục bộ trên máy người dùng, tránh bấm vào bị báo lỗi chương trình.
 
 ---
 
 ## 🛠️ III. BỘ CÔNG CỤ QUẢN TRỊ ADMIN (TẠO KEY & DUYỆT YÊU CẦU)
 
-*Chỉ chạy trên máy của Admin Tuấn Beo qua thư mục quản trị riêng biệt `@File-BAT/@Administrator/[ADMIN-01]-Quan-Ly-Va-Tao-Key.bat` (Thư mục `@Administrator` này được gitignore hoàn toàn và không bao giờ xuất hiện ở phía người dùng):*
+*Chỉ chạy trên máy của Admin Tuấn Beo qua thư mục quản trị riêng biệt `@Actions/@Administrator/[ADMIN-01]-Quan-Ly-Va-Tao-Key.bat` (Thư mục `@Administrator` này được gitignore hoàn toàn và không bao giờ xuất hiện ở phía người dùng):*
 
 1. **Tiếp nhận & Chọn yêu cầu:**
    - Liệt kê danh sách yêu cầu chưa xử lý từ File quản lý yêu cầu tạm (mỗi máy tính chỉ có duy nhất 1 mã yêu cầu HWID).
@@ -148,7 +148,7 @@ Quy ước công tắc tính năng: `1 = BẬT (Enable)` | `0 = TẮT (Disable)`
      + *Cách 2:* Chọn nạp file `key.txt` có sẵn.
    - Tool tự động đối soát: `HWID_May == HWID_Trong_Key`. Nếu khớp, gửi xác nhận kích hoạt lên server và thông báo thành công.
 4. **Tải nạp module chức năng động (Dynamic Module Hydration):**
-   - Chỉ những chức năng nào được cấp phép BẬT (= 1) trong Key mới được hệ thống tải về máy và kích hoạt launcher `@File-BAT/` tương ứng.
+   - Chỉ những chức năng nào được cấp phép BẬT (= 1) trong Key mới được hệ thống tải về máy và kích hoạt launcher `@Actions/` tương ứng.
 
 ---
 
@@ -173,7 +173,7 @@ Quy ước công tắc tính năng: `1 = BẬT (Enable)` | `0 = TẮT (Disable)`
 
 ### ⚠️ QUY CHUẨN THU HỒI & GIA HẠN DÙNG CHUNG CHO CẢ 2 HÌNH THỨC:
 1. **Cơ chế tự hủy an toàn khi hết hạn hoặc bị thu hồi:**
-   - Nếu Key hết hạn sử dụng: Toàn bộ module chức năng và các file phím tắt `.bat` tương ứng trong `@File-BAT/` sẽ bị xóa sạch, tránh việc bấm vào gây lỗi.
+   - Nếu Key hết hạn sử dụng: Toàn bộ module chức năng và các file phím tắt `.bat` tương ứng trong `@Actions/` sẽ bị xóa sạch, tránh việc bấm vào gây lỗi.
    - Nếu trên Server Admin chuyển `Trạng thái Key = 0` (Thu hồi bản quyền): Phía người dùng lập tức bị vô hiệu hóa toàn bộ tính năng.
    - Hệ thống giữ lại duy nhất màn hình Gia hạn / Nâng cấp bản quyền.
 2. **Chức năng Gia hạn & Nâng cấp (License Renewal & Feature Upgrade):**

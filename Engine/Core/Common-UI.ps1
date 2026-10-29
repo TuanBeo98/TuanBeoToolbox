@@ -36,7 +36,8 @@ function Show-HeaderBanner {
     Clear-Host
     Write-Host "================================================================================" -ForegroundColor Cyan
     Write-Host "   TB-TOOLBOX - $SubTitle" -ForegroundColor Green
-    Write-Host "   Phiên bản: 1.0.0 | Tác giả: Mr. Tuấn Beo (TuanBeoToolbox)" -ForegroundColor DarkGray
+    Write-Host "   Bản quyền thuộc về: Mr. ĐÀO XUÂN TUẤN (Tuấn Beo) | Hotline: 0987.1987.92" -ForegroundColor DarkGray
+    Write-Host "   Email: tuanbeo.technology@gmail.com" -ForegroundColor DarkGray
     Write-Host "================================================================================" -ForegroundColor Cyan
     Write-Host ""
 }

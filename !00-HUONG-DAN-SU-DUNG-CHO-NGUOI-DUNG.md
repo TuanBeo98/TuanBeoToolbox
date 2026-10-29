@@ -1,5 +1,7 @@
 ﻿# HƯỚNG DẪN CÀI ĐẶT & SỬ DỤNG BỘ CÔNG CỤ TB-TOOLBOX
-> 👤 **TÁC GIẢ & BẢN QUYỀN:** ĐÀO XUÂN TUẤN (MR. TUẤN BEO)  
+> 👤 **BẢN QUYỀN THUỘC VỀ:** Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)  
+> 📞 **HOTLINE LIÊN HỆ:** 0987.1987.92  
+> 📧 **EMAIL LIÊN HỆ:** tuanbeo.technology@gmail.com  
 > 🏷️ **PHIÊN BẢN:** v2.0 Enterprise  
 > 📁 **VỊ TRÍ:** `!00-HUONG-DAN-SU-DUNG-CHO-NGUOI-DUNG.md` (nằm tại thư mục gốc TB-Toolbox)
 
@@ -23,7 +25,7 @@
 
 ### 🔹 BƯỚC 2: MỞ KHÓA MÔI TRƯỜNG (CHỈ LÀM 1 LẦN ĐẦU TIÊN)
 Do tải về từ Internet, Windows thường tự động gắn cờ bảo vệ ngầm (Mark of the Web) khiến các file script bị chặn không chạy được:
-1. Mở thư mục **`@File-BAT/`**.
+1. Mở thư mục **`@Actions/`**.
 2. Bấm đúp chuột chạy file: **`[000]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat`**.
 3. Công cụ sẽ tự động:
    - Gỡ bỏ hoàn toàn cờ chặn tải về (`Unblock-File`).
@@ -36,7 +38,15 @@ Do tải về từ Internet, Windows thường tự động gắn cờ bảo v�
 ---
 
 ### 🔹 BƯỚC 3: KHỞI CHẠY CÁC CHỨC NĂNG TIỆN ÍCH
-Vào thư mục **`@File-BAT/`** và lựa chọn công cụ bạn muốn sử dụng:
+Bạn có 2 cách khởi chạy cực kỳ tiện lợi:
+
+👉 **CÁCH 1 (TIỆN NHẤT - KHUYÊN DÙNG): DÙNG BẢNG ĐIỀU KHIỂN TRUNG TÂM**
+- Bấm đúp vào biểu tượng phím tắt **TB-Toolbox** (hoặc tệp **TB-Toolbox.bat**) ngay tại thư mục gốc.
+- Màn hình Bảng điều khiển trung tâm sẽ hiện lên toàn bộ danh sách chức năng của bạn.
+- Bạn chỉ cần gõ số thứ tự [1], [2]... hoặc gõ phím [S] để đưa phím tắt ra màn hình Desktop.
+
+👉 **CÁCH 2: CHẠY TRỰC TIẾP TỪ THƯ MỤC @Actions/**
+- Mở thư mục **@Actions/** và chọn trực tiếp công cụ bạn muốn sử dụng:
 
 👉 **Dọn dẹp hệ thống:** Bấm đúp file **`[500]-Don-Dep-Bo-Nho-Tam-He-Thong.bat`**.
 - Màn hình Console hiển thị danh sách các hạng mục dọn dẹp có đánh số:
@@ -61,3 +71,11 @@ Vào thư mục **`@File-BAT/`** và lựa chọn công cụ bạn muốn sử d
 1. **Rào chắn an toàn 24 giờ cho Temp:** Hệ thống chỉ xóa những tệp rác mồ côi đã tồn tại trên 24 giờ qua. Tuyệt đối không xóa những tệp đính kèm Word/Excel vừa mở trong ngày.
 2. **Không mất dữ liệu cá nhân trên trình duyệt:** Chức năng dọn cache trình duyệt chỉ xóa các tệp ảnh/video web tải tạm; giữ nguyên 100% Mật khẩu đã lưu, Cookie đăng nhập và Lịch sử duyệt web.
 3. **Tự phục hồi dịch vụ hệ thống:** Luôn đảm bảo dịch vụ Windows Update hoạt động trơn tru sau khi dọn dẹp.
+
+---
+
+## 📞 THÔNG TIN TÁC GIẢ & HỖ TRỢ KỸ THUẬT
+- **Bản quyền thuộc về:** Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)
+- **Số điện thoại / Hotline:** 0987.1987.92
+- **Email liên hệ:** tuanbeo.technology@gmail.com
+- **Hỗ trợ:** Cấp bản quyền sử dụng, tư vấn kỹ thuật, cấu hình và tối ưu hóa hệ thống.

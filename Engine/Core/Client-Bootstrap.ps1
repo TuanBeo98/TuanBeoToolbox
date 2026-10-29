@@ -15,7 +15,7 @@ $ENGINE_DIR = Split-Path -Parent $PSScriptRoot
 $TB_ROOT = Split-Path -Parent $ENGINE_DIR
 $CORE_DIR = $PSScriptRoot
 $CONFIG_DIR = Join-Path $ENGINE_DIR "Config"
-$BAT_DIR = Join-Path $TB_ROOT "@File-BAT"
+$BAT_DIR = Join-Path $TB_ROOT "@Actions"
 $LICENSE_KEY_FILE = Join-Path $CONFIG_DIR "license.key"
 
 # Dot-source các thư viện cần thiết
@@ -24,7 +24,7 @@ $LICENSE_KEY_FILE = Join-Path $CONFIG_DIR "license.key"
 . (Join-Path $CORE_DIR "License-Engine.ps1")
 
 # ==============================================================================
-# 1. CẤP PHÁT LAUNCHER @File-BAT ĐỘNG THEO QUYỀN (DYNAMIC MODULE HYDRATION)
+# 1. CẤP PHÁT LAUNCHER @Actions ĐỘNG THEO QUYỀN (DYNAMIC MODULE HYDRATION)
 # ==============================================================================
 
 function Sync-ClientLaunchers {
@@ -94,12 +94,12 @@ function Process-PrePackagedFlow {
         Write-Host "`n ================================================================================" -ForegroundColor Green
         Write-Host "                      CÀI ĐẶT & KÍCH HOẠT HOÀN TẤT!                             " -ForegroundColor Green
         Write-Host " ================================================================================" -ForegroundColor Green
-        Write-Host " Bạn đã có thể sử dụng các công cụ được cấp phép trong thư mục @File-BAT." -ForegroundColor Yellow
+        Write-Host " Bạn đã có thể sử dụng các công cụ được cấp phép trong thư mục @Actions." -ForegroundColor Yellow
         Write-Host "================================================================================`n" -ForegroundColor DarkGray
     } else {
         Write-Host "`n [X] THẤT BẠI: $($lockRes.Message)" -ForegroundColor Red
         Write-Host " Bản quyền không hợp lệ hoặc thư mục này đã bị sao chép sang máy tính khác sử dụng." -ForegroundColor Red
-        Write-Host " Vui lòng liên hệ Admin Tuấn Beo để được hỗ trợ cấp lại Key!`n" -ForegroundColor Yellow
+        Write-Host " Vui lòng liên hệ: Mr. ĐÀO XUÂN TUẤN (Tuấn Beo) - Hotline: 0987.1987.92 | Email: tuanbeo.technology@gmail.com để được hỗ trợ cấp lại Key!`n" -ForegroundColor Yellow
     }
 
     Wait-ForUserExit -Message " Nhấn phím bất kỳ để đóng..."
@@ -118,7 +118,7 @@ function Process-InteractiveActivationFlow {
     Write-Host "--------------------------------------------------------------------------------" -ForegroundColor DarkGray
     Write-Host " [1] Nhập chuỗi Mã Key trực tiếp" -ForegroundColor Cyan
     Write-Host " [2] Nạp từ tệp key.txt có sẵn" -ForegroundColor Cyan
-    Write-Host " [3] Gửi yêu cầu cấp Key mới lên Admin Tuấn Beo" -ForegroundColor Cyan
+    Write-Host " [3] Gửi yêu cầu cấp Key mới tới Tác giả (Mr. ĐÀO XUÂN TUẤN)" -ForegroundColor Cyan
     Write-Host " [0] Thoát chương trình`n" -ForegroundColor DarkGray
 
     $opt = Read-Host " Chọn thao tác [0-3]"
@@ -195,7 +195,7 @@ function Process-InteractiveActivationFlow {
             Save-JsonWithBom -Path $reqFile -Data $reqStore | Out-Null
 
             Write-Host "`n [OK] ĐÃ GHI NHẬN YÊU CẦU THÀNH CÔNG!" -ForegroundColor Green
-            Write-Host " Vui lòng gửi mã HWID của bạn cho Admin Tuấn Beo để được phê duyệt:`n" -ForegroundColor Yellow
+            Write-Host " Vui lòng gửi mã HWID của bạn cho Tác giả: Mr. ĐÀO XUÂN TUẤN (Tuấn Beo) - Hotline: 0987.1987.92 để được phê duyệt:`n" -ForegroundColor Yellow
             Write-Host " HWID: $currentHWID" -ForegroundColor Cyan
             Write-Host "`n Sau khi nhận được tệp key.txt, bạn mở lại chương trình để kích hoạt.`n" -ForegroundColor DarkGray
             Wait-ForUserExit -Message " Nhấn phím bất kỳ để tiếp tục..."
@@ -223,7 +223,7 @@ function Process-InteractiveActivationFlow {
         # Sinh launcher cho các chức năng hợp lệ
         Sync-ClientLaunchers -AuthorizedFeatures $verify.Payload.features
 
-        Write-Host "`n Bạn đã có thể sử dụng các công cụ trong thư mục @File-BAT.`n" -ForegroundColor Green
+        Write-Host "`n Bạn đã có thể sử dụng các công cụ trong thư mục @Actions.`n" -ForegroundColor Green
     } else {
         Write-Host "`n [X] KÍCH HOẠT THẤT BẠI: $($verify.Error)" -ForegroundColor Red
     }

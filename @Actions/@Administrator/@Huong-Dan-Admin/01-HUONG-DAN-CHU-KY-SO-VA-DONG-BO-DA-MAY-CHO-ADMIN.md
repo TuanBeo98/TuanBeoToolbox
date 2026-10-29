@@ -1,7 +1,7 @@
-# HƯỚNG DẪN CHỮ KÝ SỐ & ĐỒNG BỘ ĐA MÁY DÀNH CHO ADMIN
+﻿# HƯỚNG DẪN CHỮ KÝ SỐ & ĐỒNG BỘ ĐA MÁY DÀNH CHO ADMIN
 > ⚠️ **TÀI LIỆU TỐI MẬT QUẢN TRỊ - TUYỆT ĐỐI KHÔNG CUNG CẤP CHO CLIENT**  
 > 👤 **BẢN QUYỀN:** ĐÀO XUÂN TUẤN (MR. TUẤN BEO - TECHNICAL CONSULTANT)  
-> 📁 **VỊ TRÍ:** `@File-BAT/@Administrator/@Huong-Dan-Admin/01-HUONG-DAN-CHU-KY-SO-VA-DONG-BO-DA-MAY-CHO-ADMIN.md`
+> 📁 **VỊ TRÍ:** `@Actions/@Administrator/@Huong-Dan-Admin/01-HUONG-DAN-CHU-KY-SO-VA-DONG-BO-DA-MAY-CHO-ADMIN.md`
 
 ---
 
@@ -51,18 +51,18 @@ Khi Anh Beo ngồi vào một máy tính mới, chỉ cần thực hiện 3 bư�
    Chạy file `[TB-00]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat` để mở khóa chính sách PowerShell.
 3. **Bước 3:** Bắt đầu làm việc!
    - Mở AI IDE (Antigravity / Cursor / VSCode) chat bình thường: AI tự nhận diện Profile `TuanBeo` và Token `ALL`.
-   - Khởi chạy các công cụ Admin tại `@File-BAT/@Administrator/` mà không cần nhập lại bất kỳ Key nào.
+   - Khởi chạy các công cụ Admin tại `@Actions/@Administrator/` mà không cần nhập lại bất kỳ Key nào.
 
 ### Cách 2: Sử dụng qua USB / Ổ Cứng Di Động (Offline)
 1. Copy nguyên vẹn thư mục `AI` hoặc `TB-Toolbox` vào USB.
 2. Cắm vào máy tính mới.
-3. Bấm đúp chạy thẳng các file kịch bản trong `@File-BAT/@Administrator/`. Hệ thống nhận diện Master Session và cấp toàn quyền tức thì.
+3. Bấm đúp chạy thẳng các file kịch bản trong `@Actions/@Administrator/`. Hệ thống nhận diện Master Session và cấp toàn quyền tức thì.
 
 ---
 
 ## 🔄 IV. HƯỚNG DẪN TẠO LẠI / GIA HẠN TOKEN ADMIN NẾU BỊ MẤT
 Nếu vô tình làm mất file cấu hình hoặc muốn cấp lại Token Admin cho chính mình:
-1. Vào thư mục `@File-BAT/@Administrator/`.
+1. Vào thư mục `@Actions/@Administrator/`.
 2. Bấm chạy: **`[ADMIN-201]-Quan-Ly-Va-Tao-Key.bat`**.
 3. Chọn tính năng **Tạo Key mới**:
    - Tên người dùng: `TuanBeo`

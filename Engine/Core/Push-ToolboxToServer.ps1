@@ -1,8 +1,9 @@
 ﻿<#
 ================================================================================
  TB-TOOLBOX - GIT SYNCHRONIZATION ENGINE (Push-ToolboxToServer.ps1)
- Bản quyền: Mr. Tuấn Beo (TuanBeo)
- Mô tả: Động cơ đồng bộ Git lên Server GitHub, 100% Tiếng Việt có dấu,
+ Bản quyền thuộc về: Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)
+ Hotline: 0987.1987.92 | Email: tuanbeo.technology@gmail.com
+ Mô tả: Động cơ đồng bộ lên Máy chủ Trung tâm an toàn, 100% Tiếng Việt có dấu,
         thanh tiến trình siêu mượt, đối soát SHA và bảo mật mã nguồn
 ================================================================================
 #>
@@ -10,7 +11,7 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::InputEncoding  = [System.Text.Encoding]::UTF8
 
-$Host.UI.RawUI.WindowTitle = "[ADMIN-001] ĐẨY TB-TOOLBOX LÊN SERVER GITHUB - TUANBEO"
+$Host.UI.RawUI.WindowTitle = "[ADMIN-001] ĐẨY MÃ NGUỒN LÊN MÁY CHỦ BẢO MẬT - MR. ĐÀO XUÂN TUẤN (TUẤN BEO)"
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $ToolboxRoot = (Resolve-Path (Join-Path $ScriptDir "..\..")).Path
@@ -34,7 +35,9 @@ function Get-ProgressBarString {
 
 Clear-Host
 Write-Host "========================================================================================" -ForegroundColor Cyan
-Write-Host "              [ADMIN-001] ĐẨY TB-TOOLBOX LÊN SERVER GITHUB (TuanBeoToolbox)             " -ForegroundColor Green
+Write-Host "              [ADMIN-001] ĐẨY TB-TOOLBOX LÊN MÁY CHỦ BẢO MẬT                            " -ForegroundColor Green
+Write-Host "            Bản quyền thuộc về: Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)                            " -ForegroundColor DarkGray
+Write-Host "        Hotline: 0987.1987.92 | Email: tuanbeo.technology@gmail.com                     " -ForegroundColor DarkGray
 Write-Host "========================================================================================" -ForegroundColor Cyan
 
 # Kiểm tra kho Git
@@ -154,7 +157,7 @@ if ($totalFiles -gt 0) {
     Write-Host "  * Số lượng tệp thay đổi : " -NoNewline -ForegroundColor White
     Write-Host "$totalFiles tệp tin" -ForegroundColor Magenta
     Write-Host "----------------------------------------------------------------------------------------" -ForegroundColor DarkGray
-    Write-Host "  [1] TIẾP TỤC  - Tiến hành tạo Commit và Đẩy lên GitHub ngay" -ForegroundColor Green
+    Write-Host "  [1] TIẾP TỤC  - Tiến hành tạo Commit và Đẩy lên Máy chủ ngay" -ForegroundColor Green
     Write-Host "  [0] HỦY BỎ    - Dừng lại, giữ nguyên tệp tin để tiếp tục làm thêm rồi commit sau" -ForegroundColor Red
     Write-Host "========================================================================================`n" -ForegroundColor Cyan
 
@@ -196,25 +199,25 @@ if (-not $commitMsg) {
     $commitMsg = (git log -1 --pretty=format:%s 2>$null)
 }
 
-Write-Host "[4/4] ĐANG ĐẨY COMMIT LÊN GITHUB SERVER (origin $currentBranch)..." -ForegroundColor Cyan
+Write-Host "[4/4] ĐANG ĐẨY COMMIT LÊN MÁY CHỦ BẢO MẬT (origin $currentBranch)..." -ForegroundColor Cyan
 Write-Host "----------------------------------------------------------------------------------------" -ForegroundColor DarkGray
 
 git push origin $currentBranch
 if ($LASTEXITCODE -ne 0) {
     Write-Host "`n========================================================================================" -ForegroundColor Red
-    Write-Host "                 [XXX] KẾT QUẢ: THẤT BẠI - KHÔNG THỂ ĐẨY COMMIT LÊN GITHUB              " -ForegroundColor Red
+    Write-Host "                 [XXX] KẾT QUẢ: THẤT BẠI - KHÔNG THỂ ĐẨY COMMIT LÊN MÁY CHỦ             " -ForegroundColor Red
     Write-Host "========================================================================================" -ForegroundColor Red
     Write-Host "   * CÁC NGUYÊN NHÂN CHÍNH CẦN KIỂM TRA:" -ForegroundColor Yellow
-    Write-Host "     1. MẤT KẾT NỐI INTERNET hoặc mạng công ty chặn truy cập github.com." -ForegroundColor White
-    Write-Host "     2. HẾT HẠN TOKEN hoặc không có quyền ghi [Permission Denied / 403]." -ForegroundColor White
-    Write-Host "     3. XUNG ĐỘT CODE: Trên GitHub có commit mới hơn chưa được Pull về." -ForegroundColor White
+    Write-Host "     1. MẤT KẾT NỐI INTERNET hoặc mạng nội bộ chặn kết nối máy chủ." -ForegroundColor White
+    Write-Host "     2. HẾT HẠN QUYỀN TRUY CẬP hoặc không có quyền ghi [Permission Denied / 403]." -ForegroundColor White
+    Write-Host "     3. XUNG ĐỘT MÃ NGUỒN: Trên máy chủ có commit mới hơn chưa được tải về." -ForegroundColor White
     Write-Host "========================================================================================`n" -ForegroundColor Red
     pause
     exit 1
 }
 
 Write-Host "----------------------------------------------------------------------------------------" -ForegroundColor DarkGray
-Write-Host "[*] Đang gửi yêu cầu xác minh SHA trực tiếp từ Server GitHub..." -ForegroundColor Cyan
+Write-Host "[*] Đang gửi yêu cầu xác minh SHA trực tiếp từ Máy chủ..." -ForegroundColor Cyan
 
 $remoteSha = ""
 $lsRemoteOutput = git ls-remote origin "refs/heads/$currentBranch" 2>$null
@@ -225,7 +228,7 @@ if ($lsRemoteOutput) {
 Write-Host ""
 if ($localSha -and $remoteSha -and ($localSha -eq $remoteSha)) {
     Write-Host "========================================================================================" -ForegroundColor Green
-    Write-Host "               [✓✓✓] KẾT QUẢ: ĐẨY LÊN GITHUB SERVER THÀNH CÔNG 100%!                    " -ForegroundColor Green
+    Write-Host "               [✓✓✓] KẾT QUẢ: ĐẨY LÊN MÁY CHỦ BẢO MẬT THÀNH CÔNG 100%!                  " -ForegroundColor Green
     Write-Host "========================================================================================" -ForegroundColor Green
     Write-Host "   * Trạng thái       : " -NoNewline -ForegroundColor White
     Write-Host "HOÀN TẤT VÀ ĐỒNG BỘ HOÀN TOÀN" -ForegroundColor Green
@@ -239,7 +242,7 @@ if ($localSha -and $remoteSha -and ($localSha -eq $remoteSha)) {
     Write-Host $commitMsg -ForegroundColor Yellow
     Write-Host "========================================================================================" -ForegroundColor Green
     $barFinal = Get-ProgressBarString -Percent 100
-    Write-Host "  TIẾN TRÌNH: [$barFinal] 100% - ĐỒNG BỘ GITHUB HOÀN TẤT XUẤT SẮC!" -ForegroundColor Green
+    Write-Host "  TIẾN TRÌNH: [$barFinal] 100% - ĐỒNG BỘ MÁY CHỦ HOÀN TẤT XUẤT SẮC!" -ForegroundColor Green
     Write-Host "========================================================================================`n" -ForegroundColor Green
 } else {
     Write-Host "========================================================================================" -ForegroundColor Yellow

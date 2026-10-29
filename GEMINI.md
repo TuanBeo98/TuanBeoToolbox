@@ -1,7 +1,9 @@
 ﻿# TB-TOOLBOX SYSTEM BOOTLOADER (GEMINI.md)
 > 📝 **MÔ TẢ:** Tệp nạp khởi động (Entry Point) dành cho AI (Google Gemini & Antigravity IDE). Tệp này đóng vai trò Bootloader công khai, điều hướng AI kết nối trực tiếp vào Nguồn chân lý duy nhất (Single Source of Truth) nằm trong vùng bảo mật TB-Toolbox.
 > 📁 **VỊ TRÍ:** `GEMINI.md` (nằm trực tiếp tại thư mục gốc `{TOOLBOX_ROOT}`)
-> 👤 **BẢN QUYỀN THUỘC VỀ:** Đào Xuân Tuấn (Mr. Tuấn Beo)
+> 👤 **BẢN QUYỀN THUỘC VỀ:** Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)
+> 📞 **HOTLINE LIÊN HỆ:** 0987.1987.92
+> 📧 **EMAIL LIÊN HỆ:** tuanbeo.technology@gmail.com
 
 ---
 
@@ -33,11 +35,11 @@ Mọi hành động, phản hồi, chẩn đoán và sinh mã nguồn trong toà
 
 1. **Phía Admin Quản Trị (Mr. Tuấn Beo - Master Owner):**
    - Toàn quyền sử dụng rule, thêm mới/chỉnh sửa chức năng, cấu hình phân quyền và đồng bộ lên Git Server để làm việc đa máy cá nhân.
-   - Được phép sử dụng bộ công cụ `@File-BAT/@Administrator/[ADMIN-04]-Quan-Ly-Phan-Quyen.bat`.
+   - Được phép sử dụng bộ công cụ `@Actions/@Administrator/[ADMIN-04]-Quan-Ly-Phan-Quyen.bat`.
 2. **Phía Người Dùng (Client):**
    - **Chế độ Sử Dụng Thuần Túy:** Người dùng chỉ tải chức năng về sử dụng (có chức năng nào xài chức năng đó).
    - **Tuyệt đối không can thiệp vào Rule:** Không có quyền sửa đổi rule, tuyệt đối không được viết chức năng mới.
-   - **Tuyệt đối cấm xem, cấm có mặt các file quản trị:** Thư mục `TB-AI-Rule/00-Admin_Security/` và `@File-BAT/@Administrator/` tuyệt đối không được xuất hiện trên máy người dùng.
+   - **Tuyệt đối cấm xem, cấm có mặt các file quản trị:** Thư mục `TB-AI-Rule/00-Admin_Security/` và `@Actions/@Administrator/` tuyệt đối không được xuất hiện trên máy người dùng.
 
 ---
 
@@ -83,6 +85,6 @@ Mọi hành động, phản hồi, chẩn đoán và sinh mã nguồn trong toà
     - Thư mục gốc có file `!00-HUONG-DAN-SU-DUNG-CHO-NGUOI-DUNG.md` hướng dẫn 4 bước cho người dùng.
 
 11. **Quy Chuẩn Phân Tầng Số Hiệu Kịch Bản Người Dùng [xxx], Tiến Trình Hydration & Cam Kết Push Git Admin:**
-    - `@File-BAT/`: `[000]` Bất biến (môi trường), `[001..099]` Khởi động & Nhập Key, `[100..199]` Kiểm tra, `[200..299]` Cập nhật Server, `[300..499]` Dự phòng, `[500..999]` Chức năng tiện ích dùng chung.
+    - `@Actions/`: `[000]` Bất biến (môi trường), `[001..099]` Khởi động & Nhập Key, `[100..199]` Kiểm tra, `[200..299]` Cập nhật Server, `[300..499]` Dự phòng, `[500..999]` Chức năng tiện ích dùng chung.
     - Gói tải về ban đầu cho Client chỉ chứa đúng 3 file: `[000]`, `[001]`, `[002]`. Sau khi kích hoạt key hợp lệ mới tự động bung các file `[100]`, `[200]`, `[500]`...
     - Mọi file quản trị `@Administrator/`, `@Huong-Dan-Admin/`, `00-Admin_Security/` bắt buộc luôn luôn được commit và push lên GitHub Server của Admin qua `[ADMIN-001]`, không bao giờ được để sót lại cục bộ.

@@ -1,7 +1,7 @@
-# QUY TRÌNH VẬN HÀNH & VÒNG ĐỜI HỆ THỐNG DÀNH CHO ADMIN
+﻿# QUY TRÌNH VẬN HÀNH & VÒNG ĐỜI HỆ THỐNG DÀNH CHO ADMIN
 > ⚠️ **TÀI LIỆU TỐI MẬT QUẢN TRỊ - TUYỆT ĐỐI KHÔNG CUNG CẤP CHO CLIENT**  
 > 👤 **BẢN QUYỀN:** ĐÀO XUÂN TUẤN (MR. TUẤN BEO - TECHNICAL CONSULTANT)  
-> 📁 **VỊ TRÍ:** `@File-BAT/@Administrator/@Huong-Dan-Admin/02-QUY-TRINH-VAN-HANH-VA-VONG-DOI-HE-THONG.md`
+> 📁 **VỊ TRÍ:** `@Actions/@Administrator/@Huong-Dan-Admin/02-QUY-TRINH-VAN-HANH-VA-VONG-DOI-HE-THONG.md`
 
 ---
 
@@ -10,7 +10,7 @@
 Toàn bộ các công cụ quản trị của Admin được sắp xếp theo 5 dải số chuyên biệt:
 
 ```text
-@File-BAT/@Administrator/
+@Actions/@Administrator/
 │
 ├── [ADMIN-001 -> 099] : TẦNG HÀNG NGÀY / GIT & CLOUD SERVER
 │   ├── [ADMIN-001]-Push-Source-To-Server.bat   <-- Đẩy mã nguồn & Rule lên GitHub an toàn

@@ -328,7 +328,7 @@ function Invoke-SystemCleaning {
         return "BACK"
     }
 
-    Write-Host "`n [✓] Đã hoàn tất phiên làm việc. Cảm ơn Anh Beo đã sử dụng TB-Toolbox!" -ForegroundColor Green
+    Write-Host "`n [✓] Đã hoàn tất phiên làm việc. Cảm ơn bạn đã sử dụng TB-Toolbox!" -ForegroundColor Green
     Wait-ForUserExit
     return "QUIT"
 }
@@ -389,7 +389,7 @@ function Start-CleanerApp {
 
         # Xử lý phím chức năng
         if ($inputVal -eq "Q") {
-            Write-Host "`n [✓] Đã thoát an toàn. Cảm ơn Anh Beo đã sử dụng TB-Toolbox!" -ForegroundColor Green
+            Write-Host "`n [✓] Đã thoát an toàn. Cảm ơn bạn đã sử dụng TB-Toolbox!" -ForegroundColor Green
             Wait-ForUserExit
             break
         }

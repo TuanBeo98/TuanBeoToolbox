@@ -1,6 +1,9 @@
 ﻿# CẤU HÌNH THÔNG TIN KỸ SƯ & HỒ SƠ DOANH NGHIỆP CHUẨN HOÁ (user-profile.md)
 > 📝 **MÔ TẢ:** Tệp cấu hình gốc quản lý toàn bộ danh tính kỹ sư, vị trí chuyên môn, nhóm làm việc, lĩnh vực ngành nghề, thông tin định danh mã nguồn, vị thế chuyên gia và quy chuẩn tác phong làm việc của AI. Tệp này được thiết kế theo cấu trúc khung chuẩn (Universal Profile Framework), áp dụng nhất quán cho mọi công ty, môi trường và dự án phần mềm.
 > 📁 **VỊ TRÍ:** `00-AIConfig/user-profile.md`
+> 👤 **BẢN QUYỀN THUỘC VỀ:** Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)
+> 📞 **HOTLINE LIÊN HỆ:** 0987.1987.92
+> 📧 **EMAIL LIÊN HỆ:** tuanbeo.technology@gmail.com
 
 > ⚠️ **NGUYÊN TẮC BẮT BUỘC DÀNH CHO AI (STRICT RULE):**  
 > 1. AI phải đọc và sử dụng **CHÍNH XÁC NGUYÊN VĂN (EXACT MATCH 100%)** các giá trị được khai báo bên dưới.  
@@ -18,8 +21,8 @@
 - **Tên viết tắt / Ký hiệu cá nhân:** TB
 - **Vị trí công việc (Job Title / Role):** Technical Consultant
 - **Đội ngũ / Nhóm chuyên trách (Team / Squad):** R&D1
-- **Email công việc:** [Chưa cấu hình]
-- **Số điện thoại / Hotline nội bộ:** [Chưa cấu hình]
+- **Email công việc:** tuanbeo.technology@gmail.com
+- **Số điện thoại / Hotline nội bộ:** 0987.1987.92
 - **Quyền hạn hệ thống (Role):** Admin
 - **Cơ chế xác thực Role:** MASTER_KEY_SESSION / SIGNED_TOKEN (Khóa cứng - Tự ý sửa sẽ kích hoạt Kill Switch)
 - **Cấp độ bản quyền hiện hành:** ADMIN

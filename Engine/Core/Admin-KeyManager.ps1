@@ -74,7 +74,7 @@ function Authenticate-Admin {
             }
             if (Verify-EmergencyRecoveryKey -InputKey $recCode.Trim()) {
                 Write-Host "`n [OK] XÁC THỰC MÃ CỨU HỘ THÀNH CÔNG!" -ForegroundColor Green
-                $newPass = Read-Host " Nhập Mã MasterKey mới của Anh Beo (hoặc [0] để Giữ nguyên)"
+                $newPass = Read-Host " Nhập Mã MasterKey mới (hoặc [0] để Giữ nguyên)"
                 if ($newPass -eq "0" -or [string]::IsNullOrWhiteSpace($newPass)) {
                     Write-Host " Giữ nguyên MasterKey cũ." -ForegroundColor Yellow
                 } else {
@@ -327,7 +327,7 @@ function Process-InteractiveKeyIssue {
     Write-Host (" Thời hạn       : {0}" -f (if ($days -eq 0) { "Vô thời hạn (LIFETIME)" } else { "$days ngày" }))
     Write-Host "================================================================================" -ForegroundColor Cyan
 
-    $confirm = Read-Host " Anh Beo có chắc chắn muốn tạo Key này? [Y/N] (Mặc định: Y, [0/N] để Hủy)"
+    $confirm = Read-Host " Bạn có chắc chắn muốn tạo Key này? [Y/N] (Mặc định: Y, [0/N] để Hủy)"
     if ($confirm -eq "0" -or $confirm -eq "N" -or $confirm -eq "n") {
         Write-Host " Đã hủy thao tác tạo Key." -ForegroundColor Yellow
         Start-Sleep -Seconds 1
@@ -421,7 +421,7 @@ function Build-PrePackagedClientBundle {
     $bundleDir = Join-Path $DIST_DIR "TB-Toolbox-PrePackaged-$cleanName"
     if (Test-Path $bundleDir) { Remove-Item $bundleDir -Recurse -Force }
 
-    $bundleBatDir = Join-Path $bundleDir "@File-BAT"
+    $bundleBatDir = Join-Path $bundleDir "@Actions"
     $bundleCoreDir = Join-Path $bundleDir "Core"
     $bundleConfigDir = Join-Path $bundleDir "Config"
     $bundleLogsDir = Join-Path $bundleDir "Logs"
@@ -451,7 +451,7 @@ function Build-PrePackagedClientBundle {
         Copy-Item (Join-Path $CORE_DIR "Config-Manager.ps1") $bundleCoreDir -Force
         Copy-Item (Join-Path $CORE_DIR "Engine-Cleaner.ps1") $bundleCoreDir -Force
         Copy-Item (Join-Path $CONFIG_DIR "cleaner-config.json") $bundleConfigDir -Force -ErrorAction SilentlyContinue
-        Copy-Item (Join-Path $TB_ROOT "@File-BAT\[500]-Don-Dep-Bo-Nho-Tam-He-Thong.bat") $bundleBatDir -Force
+        Copy-Item (Join-Path $TB_ROOT "@Actions\[500]-Don-Dep-Bo-Nho-Tam-He-Thong.bat") $bundleBatDir -Force
     }
 
     # Ghi file Key nhúng sẵn vào Config/license.key
@@ -562,8 +562,8 @@ function Manage-SecurityAndRecovery {
             Write-Host "`n ================================================================================" -ForegroundColor Green
             Write-Host "                   MÃ CỨU HỘ KHẨN CẤP ĐANG HOẠT ĐỘNG                            " -ForegroundColor Yellow
             Write-Host " ================================================================================" -ForegroundColor Green
-            Write-Host " Mã của Anh Beo: $recKey" -ForegroundColor Green
-            Write-Host " Lưu ý: Anh Beo hãy lưu mã này vào Ghi chú điện thoại hoặc Zalo cá nhân." -ForegroundColor Yellow
+            Write-Host " Mã cứu hộ của bạn: $recKey" -ForegroundColor Green
+            Write-Host " Lưu ý: Hãy lưu mã này vào Ghi chú điện thoại hoặc nơi an toàn." -ForegroundColor Yellow
             Write-Host " Nếu quên MasterKey trên bất kỳ máy tính nào, chỉ cần nhập mã này để mở khóa!" -ForegroundColor Yellow
             Write-Host " ================================================================================`n" -ForegroundColor Green
             Wait-ForUserExit -Message " Nhấn phím bất kỳ để quay lại..."
@@ -591,7 +591,7 @@ function Manage-SecurityAndRecovery {
             }
         }
         "3" {
-            $confirm = Read-Host " Anh Beo có chắc chắn muốn tạo lại Mã Cứu Hộ mới? [Y/N] (Mặc định: N, [0/N] để Hủy)"
+            $confirm = Read-Host " Bạn có chắc chắn muốn tạo lại Mã Cứu Hộ mới? [Y/N] (Mặc định: N, [0/N] để Hủy)"
             if ($confirm -eq "Y" -or $confirm -eq "y") {
                 Initialize-RSAKeyPair -ForceRegenerate | Out-Null
                 $newRec = Get-EmergencyRecoveryKey
@@ -625,7 +625,7 @@ function Start-AdminConsole {
         Write-Host " [7] Quản lý Mật khẩu & Cứu hộ (Đổi MasterKey / Xem Mã Cứu Hộ)" -ForegroundColor Yellow
         Write-Host " [0] Thoát chương trình`n" -ForegroundColor DarkGray
 
-        $choice = Read-Host " Nhập lựa chọn của Anh Beo [0-7]"
+        $choice = Read-Host " Mời bạn chọn chức năng [0-7]"
         switch ($choice) {
             "1" { Show-PendingRequestsMenu }
             "2" { Process-InteractiveKeyIssue }
@@ -664,7 +664,7 @@ function Start-AdminConsole {
             }
             "7" { Manage-SecurityAndRecovery }
             "0" { 
-                Write-Host "`n [OK] Đang thoát chương trình quản trị. Tạm biệt Anh Beo!`n" -ForegroundColor Green
+                Write-Host "`n [OK] Đang thoát chương trình quản trị. Tạm biệt!`n" -ForegroundColor Green
                 return 
             }
             default { Write-Host " Lựa chọn không hợp lệ!" -ForegroundColor Red; Start-Sleep -Seconds 1 }
