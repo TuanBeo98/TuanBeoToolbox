@@ -10,8 +10,9 @@
 
 Add-Type -AssemblyName System.Security
 
-$TB_ROOT = Split-Path -Parent $PSScriptRoot
-$CONFIG_DIR = Join-Path $TB_ROOT "Config"
+$ENGINE_DIR = Split-Path -Parent $PSScriptRoot
+$TB_ROOT = Split-Path -Parent $ENGINE_DIR
+$CONFIG_DIR = Join-Path $ENGINE_DIR "Config"
 $PRIVATE_KEY_FILE = Join-Path $CONFIG_DIR "admin-private.rsa"
 $PUBLIC_KEY_FILE  = Join-Path $CONFIG_DIR "tb-public.rsa"
 $RECOVERY_VAULT   = Join-Path $CONFIG_DIR ".recovery.vault"

@@ -11,12 +11,32 @@ $coreDir = $PSScriptRoot
 . (Join-Path $coreDir "Common-UI.ps1")
 . (Join-Path $coreDir "Config-Manager.ps1")
 
-# Khởi tạo đường dẫn thư mục Logs
-$rootDir = Split-Path -Parent $coreDir
-$logDir = Join-Path $rootDir "Logs"
-if (-not (Test-Path $logDir)) {
-    New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+# Khởi tạo đường dẫn hệ thống Engine
+$engineDir = Split-Path -Parent $coreDir
+$rootDir = Split-Path -Parent $engineDir
+$logDir = Join-Path $engineDir "Logs"
+$featureLogDir = Join-Path $logDir "[TB-01]-Don-Dep-Bo-Nho-Tam"
+if (-not (Test-Path $featureLogDir)) {
+    New-Item -ItemType Directory -Path $featureLogDir -Force | Out-Null
 }
+
+# Auto-Purge: Tự động giữ tối đa 30 file log gần nhất của chức năng này
+try {
+    $existingLogs = Get-ChildItem -Path $featureLogDir -Filter "*.log" | Sort-Object LastWriteTime -Descending
+    if ($existingLogs.Count -gt 30) {
+        $existingLogs | Select-Object -Skip 30 | ForEach-Object {
+            Remove-Item -LiteralPath $_.FullName -Force -ErrorAction SilentlyContinue
+        }
+    }
+} catch {}
+
+# Self-Healing: Đảm bảo dịch vụ wuauserv không bị tắt kẹt từ trước
+try {
+    $wuService = Get-Service -Name "wuauserv" -ErrorAction SilentlyContinue
+    if ($wuService -and $wuService.StartType -eq "Disabled") {
+        Set-Service -Name "wuauserv" -StartupType Manual -ErrorAction SilentlyContinue
+    }
+} catch {}
 
 # ==============================================================================
 # BẢO VỆ BẢN QUYỀN & NIÊM PHONG TÍNH TOÀN VẸN 3 TẦNG (TRIPLE-SHIELD GATE)
@@ -26,7 +46,7 @@ if (Test-Path (Join-Path $coreDir "License-Engine.ps1")) {
     $currentHwid = Get-MachineHWID
 
     # Kiểm tra xem có phải máy Admin Tuấn Beo không
-    $whitelistFile = Join-Path $rootDir "Config\admin-whitelist.json"
+    $whitelistFile = Join-Path $engineDir "Config\admin-whitelist.json"
     $isAdminMachine = $false
     if (Test-Path $whitelistFile) {
         try {
@@ -120,7 +140,7 @@ function Invoke-SystemCleaning {
     $isAdmin = Test-IsAdmin
     $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
     $userPrefix = if ($env:USERNAME) { $env:USERNAME } else { "User" }
-    $logFile = Join-Path $logDir "${userPrefix}_${timestamp}_DonDepBoNhoTam.log"
+    $logFile = Join-Path $featureLogDir "${userPrefix}_${timestamp}.log"
     $logBuilder = New-Object System.Text.StringBuilder
 
     # Ghi nhận Header Log
@@ -196,6 +216,11 @@ function Invoke-SystemCleaning {
                     try {
                         # Lấy tất cả file con
                         $found = Get-ChildItem -Path $dir -Recurse -File -Force -ErrorAction SilentlyContinue
+                        # Rào chắn an toàn cho Temp: Giữ lại các file mới tạo hoặc chỉnh sửa trong vòng 24 giờ qua
+                        if ($cat.Name -eq "temp" -and $found) {
+                            $safeThreshold = (Get-Date).AddHours(-24)
+                            $found = $found | Where-Object { $_.LastWriteTime -lt $safeThreshold }
+                        }
                         if ($found) { $filesToClean += $found }
                     } catch {}
                 }

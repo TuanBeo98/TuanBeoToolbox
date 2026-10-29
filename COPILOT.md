@@ -1,6 +1,6 @@
-﻿# TB-TOOLBOX SYSTEM BOOTLOADER (COPILOT.md)
-> 📝 **MÔ TẢ:** Tệp nạp khởi động (Entry Point) dành cho AI (GitHub Copilot). Tệp này đóng vai trò Bootloader công khai, điều hướng AI kết nối trực tiếp vào Nguồn chân lý duy nhất (Single Source of Truth) nằm trong vùng bảo mật TB-Toolbox.
-> 📁 **VỊ TRÍ:** `COPILOT.md` (nằm trực tiếp tại thư mục gốc `{TOOLBOX_ROOT}`)
+﻿# TB-TOOLBOX SYSTEM BOOTLOADER (GEMINI.md)
+> 📝 **MÔ TẢ:** Tệp nạp khởi động (Entry Point) dành cho AI (Google Gemini & Antigravity IDE). Tệp này đóng vai trò Bootloader công khai, điều hướng AI kết nối trực tiếp vào Nguồn chân lý duy nhất (Single Source of Truth) nằm trong vùng bảo mật TB-Toolbox.
+> 📁 **VỊ TRÍ:** `GEMINI.md` (nằm trực tiếp tại thư mục gốc `{TOOLBOX_ROOT}`)
 > 👤 **BẢN QUYỀN THUỘC VỀ:** Đào Xuân Tuấn (Mr. Tuấn Beo)
 
 ---
@@ -59,3 +59,26 @@ Mọi hành động, phản hồi, chẩn đoán và sinh mã nguồn trong toà
    - Tất cả `.bat` lưu ANSI/ASCII không BOM, có `chcp 65001 >nul 2>&1`.
    - Hàng được chọn (`BẬT`): Tô sáng toàn bộ hàng bằng màu **Xanh lá (Green)**.
    - Hàng chưa chọn (`TẮT`): Chìm màu **Xám mờ (DarkGray)**.
+
+6. **Quy Chuẩn Bắt Buộc Về Logging Phân Cấp Thư Mục:**
+   - Mọi chức năng khi thực thi bắt buộc tạo thư mục riêng trong `Engine/Logs/[Tên_Chức_Năng]/<User>_<Timestamp>.log`.
+   - File log lưu UTF-8 with BOM, tự động dọn dẹp giữ 30 phiên gần nhất, có phím tắt `[O]` để mở xem ngay bằng Notepad.
+7. **Quy Chuẩn Phân Tầng Số Hiệu `[ADMIN-xxx]`:**
+   - `[ADMIN-001..099]`: Hàng ngày / Git & Server.
+   - `[ADMIN-100..199]`: Quản lý chức năng & phân quyền (`[ADMIN-100]-Quan-Ly-Phan-Quyen.bat`).
+   - `[ADMIN-200..299]`: Đóng gói xuất xưởng & Cấp bản quyền Client.
+   - `[ADMIN-300..499]`: Dự phòng mở rộng tương lai (Reserved).
+   - `[ADMIN-500..599]`: Vận hành đặc thù / bảo mật ca kíp.
+8. **Quy Chuẩn Đồng Bộ Đa Máy Cho Admin:**
+   - Script bản quyền `License-Engine.ps1` bắt buộc bỏ qua so khớp HWID khi `HWID == "ALL"` hoặc `groupId == "GF9999"` hoặc `role == "Admin"`.
+9. **Quy Chuẩn Bảo Toàn Trạng Thái & Logs Khi Cập Nhật:**
+   - Thư mục `Engine/Logs/` và file cấu hình cá nhân `Engine/Config/cleaner-config.json` bắt buộc bảo toàn nguyên vẹn 100%.
+10. **Chống Báo Động Giả Antivirus & Hướng Dẫn Sử Dụng:**
+    - Cung cấp `[TB-00]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat`.
+    - Thư mục `@Huong-Dan-Admin/` là tài liệu tối mật dành riêng cho Admin, loại trừ 100% khỏi bản phân phối Client.
+    - Thư mục gốc có file `!00-HUONG-DAN-SU-DUNG-CHO-NGUOI-DUNG.md` hướng dẫn 4 bước cho người dùng.
+
+11. **Quy Chuẩn Phân Tầng Số Hiệu Kịch Bản Người Dùng [xxx], Tiến Trình Hydration & Cam Kết Push Git Admin:**
+    - `@File-BAT/`: `[000]` Bất biến (môi trường), `[001..099]` Khởi động & Nhập Key, `[100..199]` Kiểm tra, `[200..299]` Cập nhật Server, `[300..499]` Dự phòng, `[500..999]` Chức năng tiện ích dùng chung.
+    - Gói tải về ban đầu cho Client chỉ chứa đúng 3 file: `[000]`, `[001]`, `[002]`. Sau khi kích hoạt key hợp lệ mới tự động bung các file `[100]`, `[200]`, `[500]`...
+    - Mọi file quản trị `@Administrator/`, `@Huong-Dan-Admin/`, `00-Admin_Security/` bắt buộc luôn luôn được commit và push lên GitHub Server của Admin qua `[ADMIN-001]`, không bao giờ được để sót lại cục bộ.

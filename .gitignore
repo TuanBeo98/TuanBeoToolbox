@@ -1,19 +1,25 @@
 # ==============================================================================
 # TuanBeoToolbox - .gitignore
 # Bản quyền thuộc về: Mr. Tuấn Beo (TuanBeoToolbox)
-# Chức năng: Chỉ loại bỏ các tệp nhật ký tạm và file rác hệ thống.
-#            Toàn bộ công cụ Admin & Cấu hình đều được lưu lên Git của Anh Beo
-#            để đồng bộ làm việc liền mạch trên mọi máy tính cá nhân.
+# Chức năng: Loại bỏ nhật ký thực thi, file rác và gói nén đóng gói.
+#            Bảo toàn 100% mã nguồn và tài liệu Admin trên Git riêng của Anh Beo.
 # ==============================================================================
 
-# Nhật ký thực thi cục bộ (File rác dọn dẹp)
-Logs/*.log
-!Logs/.gitkeep
+# Nhật ký thực thi cục bộ (phân cấp thư mục theo chức năng)
+Engine/Logs/**
+!Engine/Logs/.gitkeep
+Logs/**
+*.log
 
 # Thư mục tạm xuất gói cài đặt đóng gói sẵn cho khách hàng (tránh nặng repo)
+Engine/Dist/
 Dist/
 
 # Khóa bản quyền cục bộ của từng máy cá nhân (tránh đè key khi đổi máy)
+Engine/Config/license.key
+Engine/Config/.time-vault
+Engine/Config/.license.dpapi
+Engine/Config/.telemetry-queue
 Config/license.key
 Config/.time-vault
 Config/.license.dpapi

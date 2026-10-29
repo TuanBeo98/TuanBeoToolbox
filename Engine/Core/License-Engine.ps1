@@ -13,9 +13,10 @@ Add-Type -AssemblyName System.Security
 # Hang so Khoa Chu Toi Cao cua he thong
 $script:TB_MASTER_KEY = "Tuanbeo1998@"
 
-$TB_ROOT = Split-Path -Parent $PSScriptRoot
-$CORE_DIR = Join-Path $TB_ROOT "Core"
-$CONFIG_DIR = Join-Path $TB_ROOT "Config"
+$ENGINE_DIR = Split-Path -Parent $PSScriptRoot
+$TB_ROOT = Split-Path -Parent $ENGINE_DIR
+$CORE_DIR = $PSScriptRoot
+$CONFIG_DIR = Join-Path $ENGINE_DIR "Config"
 $VAULT_FILE = Join-Path $CONFIG_DIR ".time-vault"
 $DPAPI_ANCHOR_FILE = Join-Path $CONFIG_DIR ".license.dpapi"
 $REGISTRY_ANCHOR_PATH = "HKCU:\Software\Classes\CLSID\{D4A1B2C3-E5F6-4A7B-8C9D-0E1F2A3B4C5D}"
@@ -183,9 +184,10 @@ function Verify-LicenseKey {
         }
     }
 
-    # Kiem tra khoa phan cung (HWID Lock)
+    # Kiem tra khoa phan cung (HWID Lock - Bo qua cho Admin hoac Token ALL)
     if (-not [string]::IsNullOrWhiteSpace($payload.hwid)) {
-        if ($payload.hwid.ToUpper() -ne $CurrentHWID.ToUpper()) {
+        $isBypassHwid = ($payload.hwid.ToUpper() -eq "ALL" -or $payload.groupId -eq "GF9999" -or $payload.role -eq "Admin")
+        if (-not $isBypassHwid -and ($payload.hwid.ToUpper() -ne $CurrentHWID.ToUpper())) {
             return [PSCustomObject]@{ 
                 IsValid = $false; 
                 Error   = "Vi pham ban quyen: Key nay da duoc dang ky cho mot may tinh khac! (HWID: $($payload.hwid))" 

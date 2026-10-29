@@ -353,7 +353,7 @@ while ($true) {
     Write-Host "----------------------------------------------------------------------------------------" -ForegroundColor DarkGray
     Write-Host "👉 Nhập số thứ tự Nhóm cần cấu hình (1 - $($groups.Count) hoặc 0 để thoát): " -NoNewline -ForegroundColor Yellow
     
-    $choice = (Read-Host).Trim()
+    $raw = Read-Host; $choice = if ($raw) { $raw.Trim() } else { "0" }
     if ($choice -eq "0" -or $choice -eq "") {
         Write-Host "`n[*] Đã thoát hệ thống phân quyền. Hẹn gặp lại Anh Beo!" -ForegroundColor Cyan
         break

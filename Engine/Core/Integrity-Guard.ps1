@@ -8,9 +8,10 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::InputEncoding  = [System.Text.Encoding]::UTF8
 
-$TB_ROOT = Split-Path -Parent $PSScriptRoot
-$CORE_DIR = Join-Path $TB_ROOT "Core"
-$CONFIG_DIR = Join-Path $TB_ROOT "Config"
+$ENGINE_DIR = Split-Path -Parent $PSScriptRoot
+$TB_ROOT = Split-Path -Parent $ENGINE_DIR
+$CORE_DIR = $PSScriptRoot
+$CONFIG_DIR = Join-Path $ENGINE_DIR "Config"
 $SEAL_FILE = Join-Path $CONFIG_DIR ".integrity.seal"
 
 # Dot-source Crypto-RSA neu chua co
@@ -40,15 +41,15 @@ function Seal-Codebase {
     if (-not (Test-Path $CONFIG_DIR)) { New-Item -ItemType Directory -Path $CONFIG_DIR -Force | Out-Null }
 
     $targetFiles = @(
-        "Core\Common-UI.ps1",
-        "Core\Crypto-RSA.ps1",
-        "Core\License-Engine.ps1",
-        "Core\Feature-Registry.ps1",
-        "Core\Config-Manager.ps1",
-        "Core\Engine-Cleaner.ps1",
-        "Core\Client-Bootstrap.ps1",
-        "Core\Server-Sync.ps1",
-        "Core\Push-ToolboxToServer.ps1"
+        "Engine\Core\Common-UI.ps1",
+        "Engine\Core\Crypto-RSA.ps1",
+        "Engine\Core\License-Engine.ps1",
+        "Engine\Core\Feature-Registry.ps1",
+        "Engine\Core\Config-Manager.ps1",
+        "Engine\Core\Engine-Cleaner.ps1",
+        "Engine\Core\Client-Bootstrap.ps1",
+        "Engine\Core\Server-Sync.ps1",
+        "Engine\Core\Push-ToolboxToServer.ps1"
     )
 
     $fileHashes = [ordered]@{}

@@ -8,9 +8,11 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::InputEncoding  = [System.Text.Encoding]::UTF8
 
-$TB_ROOT = Split-Path -Parent $PSScriptRoot
-$CONFIG_DIR = Join-Path $TB_ROOT "Config"
-$MODULES_DIR = Join-Path $TB_ROOT "Core\Modules"
+$ENGINE_DIR = Split-Path -Parent $PSScriptRoot
+$TB_ROOT = Split-Path -Parent $ENGINE_DIR
+$CORE_DIR = $PSScriptRoot
+$CONFIG_DIR = Join-Path $ENGINE_DIR "Config"
+$MODULES_DIR = Join-Path $CORE_DIR "Modules"
 $GROUPS_FILE = Join-Path $CONFIG_DIR "feature-groups.json"
 $USER_PERMS_FILE = Join-Path $CONFIG_DIR "user-permissions.json"
 

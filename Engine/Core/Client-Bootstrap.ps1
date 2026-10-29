@@ -11,9 +11,10 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::InputEncoding  = [System.Text.Encoding]::UTF8
 
-$TB_ROOT = Split-Path -Parent $PSScriptRoot
-$CORE_DIR = Join-Path $TB_ROOT "Core"
-$CONFIG_DIR = Join-Path $TB_ROOT "Config"
+$ENGINE_DIR = Split-Path -Parent $PSScriptRoot
+$TB_ROOT = Split-Path -Parent $ENGINE_DIR
+$CORE_DIR = $PSScriptRoot
+$CONFIG_DIR = Join-Path $ENGINE_DIR "Config"
 $BAT_DIR = Join-Path $TB_ROOT "@File-BAT"
 $LICENSE_KEY_FILE = Join-Path $CONFIG_DIR "license.key"
 
@@ -41,10 +42,10 @@ function Sync-ClientLaunchers {
     }
 
     # Module F01: Dọn dẹp bộ nhớ tạm
-    $cleanerBat = Join-Path $BAT_DIR "[01]-Don-Dep-Bo-Nho-Tam-He-Thong.bat"
+    $cleanerBat = Join-Path $BAT_DIR "[500]-Don-Dep-Bo-Nho-Tam-He-Thong.bat"
     if ($featuresDict["F01_CLEANER"] -eq 1) {
         if (-not (Test-Path $cleanerBat)) {
-            $cleanerContent = "@echo off`r`nsetlocal`r`ncd /d `"%~dp0`"`r`ntitle [01] Don Dep Bo Nho Tam He Thong - TuanBeo Toolbox`r`nchcp 65001 >nul 2>&1`r`n`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`..\\Core\\Engine-Cleaner.ps1`"`r`nexit /b`r`n"
+            $cleanerContent = "@echo off`r`nsetlocal`r`ncd /d `"%~dp0`"`r`ntitle [500] Don Dep Bo Nho Tam He Thong - TuanBeo Toolbox`r`nchcp 65001 >nul 2>&1`r`n`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`..\\Core\\Engine-Cleaner.ps1`"`r`nexit /b`r`n"
             [System.IO.File]::WriteAllText($cleanerBat, $cleanerContent, [System.Text.Encoding]::ASCII)
         }
     } else {

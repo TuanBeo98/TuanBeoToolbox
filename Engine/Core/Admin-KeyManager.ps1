@@ -8,10 +8,11 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::InputEncoding  = [System.Text.Encoding]::UTF8
 
-$TB_ROOT = Split-Path -Parent $PSScriptRoot
-$CORE_DIR = Join-Path $TB_ROOT "Core"
-$CONFIG_DIR = Join-Path $TB_ROOT "Config"
-$DIST_DIR = Join-Path $TB_ROOT "Dist"
+$ENGINE_DIR = Split-Path -Parent $PSScriptRoot
+$TB_ROOT = Split-Path -Parent $ENGINE_DIR
+$CORE_DIR = $PSScriptRoot
+$CONFIG_DIR = Join-Path $ENGINE_DIR "Config"
+$DIST_DIR = Join-Path $ENGINE_DIR "Dist"
 
 # Dot-source các thư viện nền tảng
 . (Join-Path $CORE_DIR "Common-UI.ps1")
@@ -450,14 +451,14 @@ function Build-PrePackagedClientBundle {
         Copy-Item (Join-Path $CORE_DIR "Config-Manager.ps1") $bundleCoreDir -Force
         Copy-Item (Join-Path $CORE_DIR "Engine-Cleaner.ps1") $bundleCoreDir -Force
         Copy-Item (Join-Path $CONFIG_DIR "cleaner-config.json") $bundleConfigDir -Force -ErrorAction SilentlyContinue
-        Copy-Item (Join-Path $TB_ROOT "@File-BAT\[01]-Don-Dep-Bo-Nho-Tam-He-Thong.bat") $bundleBatDir -Force
+        Copy-Item (Join-Path $TB_ROOT "@File-BAT\[500]-Don-Dep-Bo-Nho-Tam-He-Thong.bat") $bundleBatDir -Force
     }
 
     # Ghi file Key nhúng sẵn vào Config/license.key
     $utf8WithBom = New-Object System.Text.UTF8Encoding($true)
     [System.IO.File]::WriteAllText((Join-Path $bundleConfigDir "license.key"), $preKey, $utf8WithBom)
 
-    # Sinh file cài đặt [00]-Cai-Dat-TB-Toolbox.bat cho Client
+    # Sinh file cài đặt [001]-Cai-Dat-TB-Toolbox.bat cho Client
     $clientBatContent = @"
 @echo off
 setlocal
@@ -470,7 +471,7 @@ exit /b
 "@
     # Ghi file BAT không có BOM
     $asciiEnc = [System.Text.Encoding]::ASCII
-    [System.IO.File]::WriteAllText((Join-Path $bundleDir "[00]-Cai-Dat-TB-Toolbox.bat"), $clientBatContent, $asciiEnc)
+    [System.IO.File]::WriteAllText((Join-Path $bundleDir "[001]-Cai-Dat-TB-Toolbox.bat"), $clientBatContent, $asciiEnc)
 
     # Lưu vào Sổ cái
     $verify = Verify-LicenseKey -LicenseKeyString $preKey -CurrentHWID ""
@@ -482,7 +483,7 @@ exit /b
     Write-Host " Thư mục gói cài đặt: $bundleDir" -ForegroundColor Cyan
     Write-Host " STT Sổ cái: $($entry.stt) | KeyId: $($entry.keyId)" -ForegroundColor DarkGray
     Write-Host " Hướng dẫn bàn giao: Chỉ cần nén thư mục này gửi cho khách hàng/nhân viên." -ForegroundColor Yellow
-    Write-Host " Khi mở [00]-Cai-Dat-TB-Toolbox.bat, chương trình sẽ:" -ForegroundColor Yellow
+    Write-Host " Khi mở [001]-Cai-Dat-TB-Toolbox.bat, chương trình sẽ:" -ForegroundColor Yellow
     Write-Host "   1. Hiển thị Cảnh báo chữ ĐỎ răn đe chia sẻ." -ForegroundColor Red
     Write-Host "   2. Tự động khóa bản quyền vào HWID máy đầu tiên (First-Run HWID Lock)." -ForegroundColor Yellow
     Write-Host "   3. Khóa ngay lập tức nếu bị copy sang máy khác!" -ForegroundColor Yellow

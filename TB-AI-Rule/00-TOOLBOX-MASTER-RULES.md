@@ -1,4 +1,4 @@
-﻿# HỆ THỐNG QUY TẮC TỐI CAO TB-TOOLBOX (00-TOOLBOX-MASTER-RULES.md)
+# HỆ THỐNG QUY TẮC TỐI CAO TB-TOOLBOX (00-TOOLBOX-MASTER-RULES.md)
 > 📝 **MÔ TẢ:** Tệp quy tắc gốc trung tâm tối cao (Single Source of Truth) áp dụng đồng bộ cho toàn bộ các mô hình AI khi làm việc trên hệ thống TB-Toolbox.
 > 📁 **VỊ TRÍ:** `TB-Toolbox/TB-AI-Rule/00-TOOLBOX-MASTER-RULES.md` (tính từ thư mục gốc `{TOOLBOX_ROOT}`)
 > 👤 **BẢN QUYỀN THUỘC VỀ:** Đào Xuân Tuấn (Mr. Tuấn Beo)
@@ -72,3 +72,77 @@
    - Hàng được chọn (`BẬT`): **Tô sáng màu Xanh lá (Green)** toàn bộ hàng.
    - Hàng chưa chọn (`TẮT`): **Chìm màu Xám mờ (DarkGray)** toàn bộ hàng.
    - Hỗ trợ nhập phím đơn (`1`) hoặc nhiều phím cùng lúc (`1, 7` hoặc `1 7`).
+
+
+---
+
+## 📝 6. QUY CHUẨN BẮT BUỘC VỀ LOGGING PHÂN CẤP THEO CHỨC NĂNG
+1. **Chỉ thị bắt buộc 100%:**
+   - Mọi chức năng/module mang mã `FNxxxx` khi thực thi **BẮT BUỘC PHẢI TỰ ĐỘNG GHI NHẬT KÝ RA ĐĨA**. Tuyệt đối cấm viết chức năng chỉ in thông tin ra màn hình console mà không lưu vết nhật ký.
+2. **Kiến trúc phân vùng thư mục nhật ký (Domain-Driven Partitioning):**
+   - Không ghi lẫn lộn log các chức năng vào chung một thư mục gốc. Mỗi chức năng bắt buộc tự động tạo một thư mục con riêng mang định danh chức năng:
+     `$featureLogDir = Join-Path $LOG_DIR "[Tên_Hoặc_Mã_Chức_Năng]"`
+     *(Ví dụ: `Engine/Logs/[TB-01]-Don-Dep-Bo-Nho-Tam/`)*.
+   - Tên file log của từng phiên chạy: `<Username>_<yyyyMMdd_HHmmss>.log`.
+   - Lưu định dạng **`UTF-8 with BOM`** để mở bằng Notepad không bao giờ bị vỡ font tiếng Việt.
+3. **Cơ chế Tự động Dọn dẹp Xoay vòng (Auto-Purge Retention):**
+   - Mỗi chức năng khi khởi chạy tự động kiểm tra thư mục log riêng của mình và **chỉ giữ lại tối đa 30 file log gần nhất** (các file cũ hơn tự động dọn sạch).
+4. **Trải nghiệm kết thúc phiên:** Cung cấp phím tắt `[O]` để người dùng mở ngay file log chi tiết bằng Notepad.
+
+---
+
+## 🛡️ 7. QUY CHUẨN PHÂN TẦNG SỐ HIỆU KỊCH BẢN QUẢN TRỊ [ADMIN-xxx]
+Mọi file BAT trong `@File-BAT/@Administrator/` bắt buộc đặt tên theo mã số 3 chữ số:
+- **`[ADMIN-001]` đến `[ADMIN-099]`**: Tầng Thao tác hàng ngày / Git & Server (`[ADMIN-001]-Push-Source-To-Server.bat`, `[ADMIN-002]-Xac-Thuc-Dong-Bo-Server.bat`).
+- **`[ADMIN-100]` đến `[ADMIN-199]`**: Tầng Quản lý nghiệp vụ & Phân quyền chức năng (`[ADMIN-100]-Quan-Ly-Phan-Quyen.bat`).
+- **`[ADMIN-200]` đến `[ADMIN-299]`**: Tầng Đóng gói xuất xưởng & Cấp phát Token User (`[ADMIN-200]-Dong-Goi-Ban-Client.bat`, `[ADMIN-201]-Tao-Token-Ban-Quyen.bat`).
+- **`[ADMIN-300]` đến `[ADMIN-499]`**: Tầng Dự phòng mở rộng tương lai (Reserved).
+- **`[ADMIN-500]` đến `[ADMIN-599]`**: Tầng Vận hành đặc thù / Bảo mật ca kíp (`[ADMIN-500]-Khoa-Rule-Bao-Ve-Tan-Ca.bat`, `[ADMIN-501]-Mo-Khoa-Rule-Vao-Ca.bat`).
+
+---
+
+## 🌐 8. QUY CHUẨN ĐỒNG BỘ ĐA MÁY CHO ADMIN (ADMIN PORTABILITY)
+1. Kỹ sư: **Đào Xuân Tuấn (UserName: `TuanBeo` - Admin Tối cao `GF9999`)**.
+2. Script bản quyền `License-Engine.ps1` **bắt buộc bỏ qua so khớp HWID** khi:
+   `HWID == "ALL"` hoặc `groupId == "GF9999"` hoặc `role == "Admin"`.
+3. Cho phép Admin cắm USB hoặc clone Git sang bất kỳ máy tính nào cũng tự động mở khóa 100% quyền Admin tức thì mà không bị chặn phần cứng.
+
+---
+
+## 🛡️ 9. QUY CHUẨN BẢO TOÀN TRẠNG THÁI & LOGS KHI CẬP NHẬT (STATE PRESERVATION SHIELD)
+1. Khi cập nhật phiên bản mới: Thư mục `Engine/Logs/` và file cấu hình cá nhân `Engine/Config/cleaner-config.json` **bắt buộc được bảo tồn nguyên vẹn 100%**.
+2. Bộ xuất bản cho Client tuyệt đối không chứa thư mục `Logs/` và chỉ đóng gói file mẫu `cleaner-config.example.json`.
+
+---
+
+## 🔓 10. CHỐNG BÁO ĐỘNG GIẢ ANTIVIRUS & TỰ ĐỘNG GỠ CỜ KHÓA TỆP MẠNG
+1. Mọi file BAT đều có dòng lệnh ngầm tự động gỡ cờ Mark of the Web (`Unblock-File`).
+2. Cung cấp file tiện ích: `[TB-00]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat` tại `@File-BAT/`.
+3. Mã nguồn viết rõ ràng, không làm mờ code (obfuscation), có tiêu đề bản quyền `Kỹ sư: Đào Xuân Tuấn (Tuấn Beo)`.
+
+---
+
+## 📚 11. QUY CHUẨN TÀI LIỆU HƯỚNG DẪN CHO ADMIN VÀ NGƯỜI DÙNG
+1. **Tài liệu Quản trị Tối mật cho Admin (`@Huong-Dan-Admin/`):**
+   - Đặt tại `@File-BAT/@Administrator/@Huong-Dan-Admin/`.
+   - Bị loại trừ 100% khi đóng gói xuất xưởng Client.
+   - Gồm 2 file: `01-HUONG-DAN-CHU-KY-SO-VA-DONG-BO-DA-MAY-CHO-ADMIN.md` và `02-QUY-TRINH-VAN-HANH-VA-VONG-DOI-HE-THONG.md`.
+2. **Tài liệu Hướng dẫn Người dùng:**
+   - Đặt tại thư mục gốc Toolbox: `!00-HUONG-DAN-SU-DUNG-CHO-NGUOI-DUNG.md`.
+
+
+---
+
+## 🎯 12. QUY CHUẨN PHÂN TẦNG SỐ HIỆU KỊCH BẢN NGƯỜI DÙNG [xxx], TIẾN TRÌNH HYDRATION & CAM KẾT PUSH GIT ADMIN
+1. **Phân tầng số hiệu 3 chữ số tầng Người dùng (`@File-BAT/`):**
+   - `[000]` (Bất biến): Kiểm tra môi trường & Giải phóng chặn mạng (`[000]-Kiem-Tra-Moi-Truong-Va-Giai-Phong-Chan.bat`).
+   - `[001]` đến `[099]`: Khởi động và cài đặt (`[001]-Cai-Dat-TB-Toolbox.bat`, `[002]-Nhap-Key-Kich-Hoat.bat`).
+   - `[100]` đến `[199]`: Kiểm tra trạng thái hệ thống (`[100]-Kiem-Tra-Trang-Thai-Toolbox.bat`).
+   - `[200]` đến `[299]`: Cập nhật từ Git Server (`[200]-Cap-Nhat-Toolbox-Tu-Server.bat`).
+   - `[300]` đến `[499]`: Dải dự phòng mở rộng (Reserved).
+   - `[500]` đến `[999]`: Các chức năng nghiệp vụ dùng chung (`[500]-Don-Dep-Bo-Nho-Tam-He-Thong.bat`...).
+2. **Cơ chế Progressive Feature Hydration:**
+   - Bản xuất xưởng ban đầu cho Client **CHỈ CÓ 3 TỆP: `[000]`, `[001]`, `[002]`**.
+   - Ngăn chặn hoàn toàn lỗi người dùng bấm bừa khi chưa kích hoạt key. Sau khi kích hoạt thành công, các file `[100]`, `[200]`, `[500]`... mới tự động xuất hiện.
+3. **Mệnh lệnh Cam kết Git Admin:**
+   - Toàn bộ các file quản trị (`@Administrator/`, `@Huong-Dan-Admin/`, `00-Admin_Security/`), quy tắc và mã nguồn Admin chỉnh sửa **BẮT BUỘC 100% PHẢI ĐƯỢC COMMIT VÀ PUSH LÊN GITHUB SERVER RIÊNG CỦA ADMIN QUA `[ADMIN-001]`**, đảm bảo đồng bộ hoàn hảo trên mọi thiết bị cá nhân.

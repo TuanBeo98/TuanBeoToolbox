@@ -10,10 +10,10 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::InputEncoding  = [System.Text.Encoding]::UTF8
 
-$Host.UI.RawUI.WindowTitle = "[ADMIN-03] ĐẨY TB-TOOLBOX LÊN SERVER GITHUB - TUANBEO"
+$Host.UI.RawUI.WindowTitle = "[ADMIN-001] ĐẨY TB-TOOLBOX LÊN SERVER GITHUB - TUANBEO"
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$ToolboxRoot = (Resolve-Path (Join-Path $ScriptDir "..")).Path
+$ToolboxRoot = (Resolve-Path (Join-Path $ScriptDir "..\..")).Path
 Set-Location $ToolboxRoot
 
 # Dot-source các module phụ trợ nếu có
@@ -34,7 +34,7 @@ function Get-ProgressBarString {
 
 Clear-Host
 Write-Host "========================================================================================" -ForegroundColor Cyan
-Write-Host "              [ADMIN-03] ĐẨY TB-TOOLBOX LÊN SERVER GITHUB (TuanBeoToolbox)             " -ForegroundColor Green
+Write-Host "              [ADMIN-001] ĐẨY TB-TOOLBOX LÊN SERVER GITHUB (TuanBeoToolbox)             " -ForegroundColor Green
 Write-Host "========================================================================================" -ForegroundColor Cyan
 
 # Kiểm tra kho Git
@@ -168,7 +168,7 @@ if ($totalFiles -gt 0) {
         Write-Host "========================================================================================" -ForegroundColor DarkYellow
         Write-Host "  * Trạng thái        : ĐÃ HỦY ĐỒNG BỘ [CHƯA TẠO COMMIT]" -ForegroundColor Yellow
         Write-Host "  * Toàn bộ tệp tin   : ĐƯỢC GIỮ NGUYÊN VẸN 100% TRÊN MÁY ĐỂ BẠN LÀM THÊM" -ForegroundColor Green
-        Write-Host "  * Bạn có thể tiếp tục sửa code rồi chạy lại script [ADMIN-03] bất kỳ lúc nào." -ForegroundColor White
+        Write-Host "  * Bạn có thể tiếp tục sửa code rồi chạy lại script [ADMIN-001] bất kỳ lúc nào." -ForegroundColor White
         $barHalt = Get-ProgressBarString -Percent 50
         Write-Host "  TIẾN TRÌNH: [$barHalt]  50% - ĐÃ TẠM DỪNG THEO LỆNH NGƯỜI DÙNG" -ForegroundColor Yellow
         Write-Host "========================================================================================`n" -ForegroundColor DarkYellow
