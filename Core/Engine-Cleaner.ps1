@@ -336,23 +336,28 @@ function Start-CleanerApp {
         foreach ($prop in $config.Categories.PSObject.Properties) {
             $idx++
             $catList += $prop
-            $statusColor = if ($prop.Value.Enabled -eq 1) { "Green" } else { "DarkGray" }
-            $statusText  = if ($prop.Value.Enabled -eq 1) { "[ 1 - BẬT ]" } else { "[ 0 - TẮT ]" }
+            $isEnabled = ($prop.Value.Enabled -eq 1)
+
+            # To mau toan bo dong khi duoc chon (Bat: Xanh Green | Tat: Xam DarkGray)
+            $numColor   = if ($isEnabled) { "Cyan" } else { "DarkGray" }
+            $rowColor   = if ($isEnabled) { "Green" } else { "DarkGray" }
+            $statusText = if ($isEnabled) { "[ 1 - BẬT ]" } else { "[ 0 - TẮT ]" }
 
             $prefix = "  [{0}] " -f $idx
             $name   = $prop.Value.Name
             $padLen = [math]::Max(2, $targetCol - $prefix.Length - $name.Length)
             $pad    = " " * $padLen
 
-            Write-Host ($prefix + $name) -NoNewline -ForegroundColor White
+            Write-Host $prefix -NoNewline -ForegroundColor $numColor
+            Write-Host $name -NoNewline -ForegroundColor $rowColor
             Write-Host $pad -NoNewline
-            Write-Host $statusText -ForegroundColor $statusColor
+            Write-Host $statusText -ForegroundColor $rowColor
         }
 
         Write-Host ""
         Write-Host " PHÍM ĐIỀU HƯỚNG:" -ForegroundColor DarkCyan
-        Write-Host "  [1..$($catList.Count)] Bật/Tắt từng mục   │  [A] Chọn TẤT CẢ       │  [C] Hủy TẤT CẢ" -ForegroundColor White
-        Write-Host "  [S / Enter] Bắt đầu dọn dẹp  │  [Q] Thoát an toàn" -ForegroundColor Yellow
+        Write-Host "  [1..$($catList.Count)] Bật/Tắt từng mục (VD: 1 hoặc 1, 7) │ [A] Chọn TẤT CẢ │ [C] Hủy TẤT CẢ" -ForegroundColor White
+        Write-Host "  [S / Enter] Bắt đầu dọn dẹp                       │ [Q] Thoát an toàn" -ForegroundColor Yellow
         Write-Host ""
 
         $inputVal = (Read-Host " Nhập lựa chọn của bạn").Trim().ToUpper()
@@ -371,14 +376,16 @@ function Start-CleanerApp {
             Set-AllCategories -Config $config -Status 0
             continue
         }
-        elseif ($inputVal -match "^\d+$") {
-            $selNum = [int]$inputVal
-            if ($selNum -ge 1 -and $selNum -le $catList.Count) {
-                $targetProp = $catList[$selNum - 1]
-                # Đảo trạng thái 0 <-> 1
-                $targetProp.Value.Enabled = if ($targetProp.Value.Enabled -eq 1) { 0 } else { 1 }
-                Save-CleanerConfig -Config $config
+        elseif ($inputVal -match "^\d+([,\s]+\d+)*$") {
+            $numbers = ($inputVal -split "[,;\s]+") | Where-Object { $_ -match "^\d+$" }
+            foreach ($n in $numbers) {
+                $selNum = [int]$n
+                if ($selNum -ge 1 -and $selNum -le $catList.Count) {
+                    $targetProp = $catList[$selNum - 1]
+                    $targetProp.Value.Enabled = if ($targetProp.Value.Enabled -eq 1) { 0 } else { 1 }
+                }
             }
+            Save-CleanerConfig -Config $config
             continue
         }
         elseif ($inputVal -eq "S" -or $inputVal -eq "") {
