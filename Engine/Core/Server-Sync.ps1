@@ -87,3 +87,62 @@ function Test-OfflineGracePeriod {
     }
     return [PSCustomObject]@{ IsValid = $true; Error = "" }
 }
+
+function Start-ServerSyncInteractive {
+    if (Test-Path (Join-Path $PSScriptRoot "Common-UI.ps1")) {
+        . (Join-Path $PSScriptRoot "Common-UI.ps1")
+    }
+    Show-HeaderBanner -SubTitle "CẬP NHẬT TB-TOOLBOX TỪ MÁY CHỦ TRUNG TÂM"
+
+    Write-Host "  * Thư mục TB-Toolbox cục bộ: $TB_ROOT" -ForegroundColor White
+    Write-Host "  * Máy chủ kết nối         : Máy chủ bảo mật Trung tâm" -ForegroundColor White
+    Write-Host ""
+
+    Write-Host "👉 Bạn có muốn kiểm tra và đồng bộ bản cập nhật mới nhất? (Y/N, Nhấn Enter hoặc Y để chạy): " -ForegroundColor Yellow -NoNewline
+    $confirm = (Read-Host).Trim()
+    if ($confirm -ne "Y" -and $confirm -ne "y" -and $confirm -ne "") {
+        Write-Host "`n[!] Đã hủy thao tác cập nhật theo yêu cầu." -ForegroundColor Gray
+        Wait-ForUserExit -Message "`nNhấn phím bất kỳ để đóng cửa sổ..."
+        return
+    }
+
+    Write-Host "`n[*] Đang kiểm tra kết nối mạng Internet..." -ForegroundColor Cyan
+    if (-not (Test-InternetConnection)) {
+        Write-Host "`n[X] Không có kết nối mạng Internet hoặc mạng nội bộ đã chặn kết nối!" -ForegroundColor Red
+        Write-Host "    Vui lòng kiểm tra lại đường truyền mạng của máy tính." -ForegroundColor Yellow
+        Wait-ForUserExit -Message "`nNhấn phím bất kỳ để đóng cửa sổ..."
+        return
+    }
+
+    Write-Host " [OK] Kết nối mạng hoạt động tốt." -ForegroundColor Green
+    Write-Host "[*] Đang kiểm tra và đồng bộ dữ liệu với Máy chủ Trung tâm..." -ForegroundColor Cyan
+
+    $gitRoot = ""
+    try { $gitRoot = (git rev-parse --show-toplevel 2>$null) } catch {}
+    if ($gitRoot -and (Test-Path (Join-Path $TB_ROOT ".git"))) {
+        Push-Location $TB_ROOT
+        try {
+            git pull origin main
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "`n================================================================================" -ForegroundColor Green
+                Write-Host "   🎉 ĐÃ CẬP NHẬT TB-TOOLBOX MỚI NHẤT TỪ MÁY CHỦ THÀNH CÔNG RỰC RỠ!            " -ForegroundColor Yellow
+                Write-Host "================================================================================" -ForegroundColor Green
+            } else {
+                Write-Host "`n[✓] Dữ liệu TB-Toolbox hiện tại đã đồng bộ với máy chủ." -ForegroundColor Green
+            }
+        } finally {
+            Pop-Location
+        }
+    } else {
+        $syncTel = Sync-TelemetryToServer
+        Write-Host "`n================================================================================" -ForegroundColor Green
+        Write-Host "   🎉 ĐÃ KẾT NỐI VÀ ĐỒNG BỘ DỮ LIỆU VỚI MÁY CHỦ THÀNH CÔNG RỰC RỠ!              " -ForegroundColor Yellow
+        Write-Host "================================================================================" -ForegroundColor Green
+    }
+
+    Wait-ForUserExit -Message "`nNhấn phím bất kỳ để đóng cửa sổ..."
+}
+
+if ($MyInvocation.InvocationName -ne '.') {
+    Start-ServerSyncInteractive
+}

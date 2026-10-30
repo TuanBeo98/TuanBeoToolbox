@@ -9,4 +9,5 @@ title [501] Hen Gio Tat May Va Quan Ly Nguon - TB-Toolbox
 chcp 65001 >nul 2>&1
 
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "..\Engine\Core\Engine-PowerManager.ps1"
+if errorlevel 1 pause
 exit /b

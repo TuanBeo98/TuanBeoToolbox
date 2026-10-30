@@ -19,6 +19,7 @@ $DIST_DIR = Join-Path $ENGINE_DIR "Dist"
 . (Join-Path $CORE_DIR "Crypto-RSA.ps1")
 . (Join-Path $CORE_DIR "Feature-Registry.ps1")
 . (Join-Path $CORE_DIR "License-Engine.ps1")
+. (Join-Path $CORE_DIR "Admin-PasswordManager.ps1")
 
 $WHITELIST_FILE = Join-Path $CONFIG_DIR "admin-whitelist.json"
 $LEDGER_FILE = Join-Path $CONFIG_DIR "key-ledger.json"
@@ -72,13 +73,13 @@ function Authenticate-Admin {
                 Write-Host " Đã hủy thao tác cứu hộ khẩn cấp." -ForegroundColor Yellow
                 continue
             }
-            if (Verify-EmergencyRecoveryKey -InputKey $recCode.Trim()) {
+            if (Verify-AdminRecoveryKey -InputKey $recCode.Trim()) {
                 Write-Host "`n [OK] XÁC THỰC MÃ CỨU HỘ THÀNH CÔNG!" -ForegroundColor Green
                 $newPass = Read-Host " Nhập Mã MasterKey mới (hoặc [0] để Giữ nguyên)"
                 if ($newPass -eq "0" -or [string]::IsNullOrWhiteSpace($newPass)) {
                     Write-Host " Giữ nguyên MasterKey cũ." -ForegroundColor Yellow
                 } else {
-                    $script:TB_MASTER_KEY = $newPass.Trim()
+                    Set-AdminPasswordInternal -NewPassword $newPass.Trim() | Out-Null
                     Write-Host " [OK] Đã đặt lại MasterKey mới thành công!" -ForegroundColor Green
                 }
                 
@@ -105,7 +106,7 @@ function Authenticate-Admin {
             continue
         }
 
-        if ($inputKey -eq $script:TB_MASTER_KEY) {
+        if (Test-AdminPassword -InputPassword $inputKey) {
             Write-Host "`n [OK] Xác thực MasterKey thành công! Đang thêm máy vào Danh sách trắng..." -ForegroundColor Green
             
             # Lưu HWID vào whitelist để lần sau không cần hỏi lại
@@ -422,9 +423,10 @@ function Build-PrePackagedClientBundle {
     if (Test-Path $bundleDir) { Remove-Item $bundleDir -Recurse -Force }
 
     $bundleBatDir = Join-Path $bundleDir "@Actions"
-    $bundleCoreDir = Join-Path $bundleDir "Core"
-    $bundleConfigDir = Join-Path $bundleDir "Config"
-    $bundleLogsDir = Join-Path $bundleDir "Logs"
+    $bundleEngineDir = Join-Path $bundleDir "Engine"
+    $bundleCoreDir = Join-Path $bundleEngineDir "Core"
+    $bundleConfigDir = Join-Path $bundleEngineDir "Config"
+    $bundleLogsDir = Join-Path $bundleEngineDir "Logs"
 
     New-Item -ItemType Directory -Path $bundleBatDir -Force | Out-Null
     New-Item -ItemType Directory -Path $bundleCoreDir -Force | Out-Null
@@ -439,6 +441,8 @@ function Build-PrePackagedClientBundle {
     Copy-Item (Join-Path $CORE_DIR "Server-Sync.ps1") $bundleCoreDir -Force
     Copy-Item (Join-Path $CORE_DIR "Feature-Registry.ps1") $bundleCoreDir -Force
     Copy-Item (Join-Path $CORE_DIR "Client-Bootstrap.ps1") $bundleCoreDir -Force
+    Copy-Item (Join-Path $CORE_DIR "Dashboard-Launcher.ps1") $bundleCoreDir -Force
+    Copy-Item (Join-Path $TB_ROOT "TB-Toolbox.bat") $bundleDir -Force
     if (Test-Path (Join-Path $CONFIG_DIR ".integrity.seal")) {
         Copy-Item (Join-Path $CONFIG_DIR ".integrity.seal") $bundleConfigDir -Force
     }
@@ -453,6 +457,10 @@ function Build-PrePackagedClientBundle {
         Copy-Item (Join-Path $CONFIG_DIR "cleaner-config.json") $bundleConfigDir -Force -ErrorAction SilentlyContinue
         Copy-Item (Join-Path $TB_ROOT "@Actions\[500]-Don-Dep-Bo-Nho-Tam-He-Thong.bat") $bundleBatDir -Force
     }
+    if ($featuresDict["F02_SHUTDOWN_TIMER"] -eq 1) {
+        Copy-Item (Join-Path $CORE_DIR "Engine-PowerManager.ps1") $bundleCoreDir -Force
+        Copy-Item (Join-Path $TB_ROOT "@Actions\[501]-Hen-Gio-Tat-May-Va-Quan-Ly-Nguon.bat") $bundleBatDir -Force
+    }
 
     # Ghi file Key nhúng sẵn vào Config/license.key
     $utf8WithBom = New-Object System.Text.UTF8Encoding($true)
@@ -461,17 +469,19 @@ function Build-PrePackagedClientBundle {
     # Sinh file cài đặt [001]-Cai-Dat-TB-Toolbox.bat cho Client
     $clientBatContent = @"
 @echo off
+:: ==============================================================================
+:: Bản quyền thuộc về: Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)
+:: Hotline: 0987.1987.92 | Email: tuanbeo.technology@gmail.com
+:: ==============================================================================
 setlocal
 cd /d "%~dp0"
-title Cai Dat & Kich Hoat TB-Toolbox
+title Cai Dat Va Kich Hoat - TB-Toolbox
 chcp 65001 >nul 2>&1
 
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "Core\Client-Bootstrap.ps1"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "Engine\Core\Client-Bootstrap.ps1"
 exit /b
 "@
-    # Ghi file BAT không có BOM
-    $asciiEnc = [System.Text.Encoding]::ASCII
-    [System.IO.File]::WriteAllText((Join-Path $bundleDir "[001]-Cai-Dat-TB-Toolbox.bat"), $clientBatContent, $asciiEnc)
+    [System.IO.File]::WriteAllText((Join-Path $bundleDir "[001]-Cai-Dat-TB-Toolbox.bat"), $clientBatContent, $utf8WithBom)
 
     # Lưu vào Sổ cái
     $verify = Verify-LicenseKey -LicenseKeyString $preKey -CurrentHWID ""
@@ -548,62 +558,7 @@ function Show-KeyLedgerViewer {
 # ==============================================================================
 
 function Manage-SecurityAndRecovery {
-    Show-HeaderBanner -SubTitle "QUẢN LÝ MẬT KHẨU & CỨU HỘ KHẨN CẤP"
-    $recKey = Get-EmergencyRecoveryKey
-    
-    Write-Host " [1] Xem Mã Cứu Hộ Khẩn Cấp (Emergency Recovery Key)" -ForegroundColor Cyan
-    Write-Host " [2] Đổi Mã MasterKey quản trị mới" -ForegroundColor Cyan
-    Write-Host " [3] Tạo lại Mã Cứu Hộ mới (Key Rotation)" -ForegroundColor Cyan
-    Write-Host " [0] Quay lại`n" -ForegroundColor DarkGray
-
-    $subChoice = Read-Host " Nhập lựa chọn [0-3]"
-    switch ($subChoice) {
-        "1" {
-            Write-Host "`n ================================================================================" -ForegroundColor Green
-            Write-Host "                   MÃ CỨU HỘ KHẨN CẤP ĐANG HOẠT ĐỘNG                            " -ForegroundColor Yellow
-            Write-Host " ================================================================================" -ForegroundColor Green
-            Write-Host " Mã cứu hộ của bạn: $recKey" -ForegroundColor Green
-            Write-Host " Lưu ý: Hãy lưu mã này vào Ghi chú điện thoại hoặc nơi an toàn." -ForegroundColor Yellow
-            Write-Host " Nếu quên MasterKey trên bất kỳ máy tính nào, chỉ cần nhập mã này để mở khóa!" -ForegroundColor Yellow
-            Write-Host " ================================================================================`n" -ForegroundColor Green
-            Wait-ForUserExit -Message " Nhấn phím bất kỳ để quay lại..."
-        }
-        "2" {
-            $oldKey = Read-Host " Nhập MasterKey hiện tại (hoặc [0] để Hủy)"
-            if ($oldKey -eq "0" -or [string]::IsNullOrWhiteSpace($oldKey)) {
-                Write-Host " Đã hủy thao tác đổi MasterKey." -ForegroundColor Yellow
-                Start-Sleep -Seconds 1
-                return
-            }
-            if ($oldKey -eq $script:TB_MASTER_KEY) {
-                $newKey = Read-Host " Nhập MasterKey mới muốn đổi (hoặc [0] để Hủy)"
-                if ($newKey -eq "0" -or [string]::IsNullOrWhiteSpace($newKey)) {
-                    Write-Host " Đã hủy thao tác đổi MasterKey." -ForegroundColor Yellow
-                    Start-Sleep -Seconds 1
-                    return
-                }
-                $script:TB_MASTER_KEY = $newKey.Trim()
-                Write-Host " [OK] Đã đổi MasterKey thành công!" -ForegroundColor Green
-                Start-Sleep -Seconds 1
-            } else {
-                Write-Host " [X] Mật khẩu cũ không chính xác!" -ForegroundColor Red
-                Start-Sleep -Seconds 1
-            }
-        }
-        "3" {
-            $confirm = Read-Host " Bạn có chắc chắn muốn tạo lại Mã Cứu Hộ mới? [Y/N] (Mặc định: N, [0/N] để Hủy)"
-            if ($confirm -eq "Y" -or $confirm -eq "y") {
-                Initialize-RSAKeyPair -ForceRegenerate | Out-Null
-                $newRec = Get-EmergencyRecoveryKey
-                Write-Host " [OK] Đã tạo Mã Cứu Hộ mới: $newRec" -ForegroundColor Green
-                Wait-ForUserExit -Message " Nhấn phím bất kỳ để tiếp tục..."
-            } else {
-                Write-Host " Đã hủy tạo mới Mã Cứu Hộ." -ForegroundColor Yellow
-                Start-Sleep -Seconds 1
-            }
-        }
-        default { return }
-    }
+    Start-AdminPasswordConsole
 }
 
 # ==============================================================================
@@ -622,10 +577,9 @@ function Start-AdminConsole {
         Write-Host " [4] Kiểm tra & Tùy biến quyền người dùng (User Permission Override)" -ForegroundColor Cyan
         Write-Host " [5] Sổ cái quản lý Key (Key Ledger - Xem, Thu hồi)" -ForegroundColor Cyan
         Write-Host " [6] Bảng ma trận tính năng & Nhóm bản quyền (Feature Matrix)" -ForegroundColor Cyan
-        Write-Host " [7] Quản lý Mật khẩu & Cứu hộ (Đổi MasterKey / Xem Mã Cứu Hộ)" -ForegroundColor Yellow
         Write-Host " [0] Thoát chương trình`n" -ForegroundColor DarkGray
 
-        $choice = Read-Host " Mời bạn chọn chức năng [0-7]"
+        $choice = Read-Host " Mời bạn chọn chức năng [0-6]"
         switch ($choice) {
             "1" { Show-PendingRequestsMenu }
             "2" { Process-InteractiveKeyIssue }
@@ -662,7 +616,6 @@ function Start-AdminConsole {
                 Show-FeatureMatrixTable
                 Wait-ForUserExit -Message " Nhấn phím bất kỳ để quay lại menu..."
             }
-            "7" { Manage-SecurityAndRecovery }
             "0" { 
                 Write-Host "`n [OK] Đang thoát chương trình quản trị. Tạm biệt!`n" -ForegroundColor Green
                 return 

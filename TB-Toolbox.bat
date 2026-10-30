@@ -5,7 +5,7 @@
 :: ==============================================================================
 setlocal
 cd /d "%~dp0"
-title TB-TOOLBOX - BANG DIEU KHIEN TRUNG TAM | Mr. DAO XUAN TUAN (Tuan Beo)
+title TB-TOOLBOX - BANG DIEU KHIEN TRUNG TAM - Mr. DAO XUAN TUAN (Tuan Beo)
 chcp 65001 >nul 2>&1
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "Engine\Core\Dashboard-Launcher.ps1"
 if errorlevel 1 pause

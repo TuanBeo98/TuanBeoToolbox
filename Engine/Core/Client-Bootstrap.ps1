@@ -8,6 +8,11 @@
 #               chống sao chép sang máy khác và hoạt động hoàn hảo Offline).
 # ==============================================================================
 
+param (
+    [switch]$StatusOnly,
+    [switch]$Interactive
+)
+
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::InputEncoding  = [System.Text.Encoding]::UTF8
 
@@ -45,8 +50,8 @@ function Sync-ClientLaunchers {
     $cleanerBat = Join-Path $BAT_DIR "[500]-Don-Dep-Bo-Nho-Tam-He-Thong.bat"
     if ($featuresDict["F01_CLEANER"] -eq 1 -or $featuresDict["FN0001"] -eq 1) {
         if (-not (Test-Path $cleanerBat)) {
-            $cleanerContent = "@echo off`r`nsetlocal`r`ncd /d `"%~dp0`"`r`ntitle [500] Don Dep Bo Nho Tam He Thong - TuanBeo Toolbox`r`nchcp 65001 >nul 2>&1`r`n`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`..\\Core\\Engine-Cleaner.ps1`"`r`nexit /b`r`n"
-            [System.IO.File]::WriteAllText($cleanerBat, $cleanerContent, [System.Text.Encoding]::ASCII)
+            $cleanerContent = "@echo off`r`n:: ==============================================================================`r`n:: Bản quyền thuộc về: Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)`r`n:: Hotline: 0987.1987.92 | Email: tuanbeo.technology@gmail.com`r`n:: ==============================================================================`r`nsetlocal`r`ncd /d `"%~dp0`"`r`ntitle [500] Don Dep Bo Nho Tam He Thong - TB-Toolbox`r`nchcp 65001 >nul 2>&1`r`n`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`..\\Engine\\Core\\Engine-Cleaner.ps1`"`r`nexit /b`r`n"
+            [System.IO.File]::WriteAllText($cleanerBat, $cleanerContent, (New-Object System.Text.UTF8Encoding($true)))
         }
     } else {
         # Nếu bị thu hồi / không được cấp -> Tự động thu hồi / xóa file launcher
@@ -57,8 +62,8 @@ function Sync-ClientLaunchers {
     $powerBat = Join-Path $BAT_DIR "[501]-Hen-Gio-Tat-May-Va-Quan-Ly-Nguon.bat"
     if ($featuresDict["F02_SHUTDOWN_TIMER"] -eq 1 -or $featuresDict["FN0002"] -eq 1) {
         if (-not (Test-Path $powerBat)) {
-            $powerContent = "@echo off`r`nsetlocal`r`ncd /d `"%~dp0`"`r`ntitle [501] Hen Gio Tat May Va Quan Ly Nguon - TuanBeo Toolbox`r`nchcp 65001 >nul 2>&1`r`n`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`..\\Core\\Engine-PowerManager.ps1`"`r`nexit /b`r`n"
-            [System.IO.File]::WriteAllText($powerBat, $powerContent, [System.Text.Encoding]::ASCII)
+            $powerContent = "@echo off`r`n:: ==============================================================================`r`n:: Bản quyền thuộc về: Mr. ĐÀO XUÂN TUẤN (Tuấn Beo)`r`n:: Hotline: 0987.1987.92 | Email: tuanbeo.technology@gmail.com`r`n:: ==============================================================================`r`nsetlocal`r`ncd /d `"%~dp0`"`r`ntitle [501] Hen Gio Tat May Va Quan Ly Nguon - TB-Toolbox`r`nchcp 65001 >nul 2>&1`r`n`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File `"`..\\Engine\\Core\\Engine-PowerManager.ps1`"`r`nexit /b`r`n"
+            [System.IO.File]::WriteAllText($powerBat, $powerContent, (New-Object System.Text.UTF8Encoding($true)))
         }
     } else {
         # Nếu bị thu hồi / không được cấp -> Tự động thu hồi / xóa file launcher
@@ -236,6 +241,14 @@ function Process-InteractiveActivationFlow {
 # ==============================================================================
 
 function Start-ClientBootstrap {
+    if ($StatusOnly) {
+        Process-PrePackagedFlow
+        return
+    }
+    if ($Interactive) {
+        Process-InteractiveActivationFlow
+        return
+    }
     # Nếu đã có sẵn file Config/license.key -> Xử lý tự động theo Pre-Packaged flow
     if (Test-Path $LICENSE_KEY_FILE) {
         Process-PrePackagedFlow

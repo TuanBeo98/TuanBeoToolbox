@@ -9,4 +9,5 @@ title [001] Cai Dat Va Kich Hoat TB-Toolbox
 chcp 65001 >nul 2>&1
 
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "..\Engine\Core\Client-Bootstrap.ps1"
+if errorlevel 1 pause
 exit /b
